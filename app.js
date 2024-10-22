@@ -8,11 +8,11 @@ const PORT = process.env.PORT || 3000;
 const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY);
 
 app.get("/", (req, res) => {
-    res.send("Hello, welcome to the text generation API!");
+    res.send("kral ensar hoşgeldin de selamla");
 });
 
 app.get('/generate-text', async (req, res) => {
-    const prompt = req.query.prompt || "Hello, my name is Berkay";
+    const prompt = req.query.prompt || "kral ensar hoşgeldin de selamla";
 
     try {
         const model = genAI.getGenerativeModel({ model: "gemini-pro" });
