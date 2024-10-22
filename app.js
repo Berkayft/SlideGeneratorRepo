@@ -1,4 +1,5 @@
 const express = require("express");
+const path = require('path');
 require("dotenv").config();
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 
@@ -7,9 +8,18 @@ const PORT = process.env.PORT || 3000;
 
 const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY);
 
-app.get("/", (req, res) => {
-    res.send("kral ensar hoşgeldin de selamla");
+
+app.engine('html', require('ejs').renderFile);
+
+app.set('views', path.join(__dirname, 'templates'));
+app.set('view engine', 'html');
+
+
+app.get('/', (req, res) => {
+    res.render('base.html');
 });
+
+
 
 app.get('/generate-text', async (req, res) => {
     const prompt = req.query.prompt || "kral ensar hoşgeldin de selamla";
