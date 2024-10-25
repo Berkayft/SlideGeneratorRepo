@@ -26,6 +26,6 @@ const slideSchema = new mongoose.Schema({
     }
 });
 
-const Slide = mongoose.model('Slide', slideSchema);
+const SlideModel = mongoose.model('SlideModel', slideSchema);
 
-module.exports = Slide;
+module.exports = SlideModel;
