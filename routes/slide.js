@@ -3,7 +3,6 @@ const router = express.Router();
 const path = require("path");
 const fs = require('fs');
 const PPTX = require('nodejs-pptx'); // Bu modülü yüklediğinizden emin olun: npm install nodejs-pptx
-const pptx = require("nodejs-pptx/lib/pptx");
 
 
 
