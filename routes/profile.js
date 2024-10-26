@@ -3,11 +3,12 @@ const router = express.Router();
 const { buyToken } = require("../middleware/moneyMiddleware");
 const isAuth = require("../middleware/authMiddleware");
 
-// Profile sayfası
 router.get("/", (req, res) => {
-    res.render("profile");
+    if (!req.isAuthenticated()) {
+        return res.redirect("/login");
+    }
+    res.render("profile", { user: req.user });
 });
-
 // Token satın alma işlemi
 router.post("/buytoken", isAuth, buyToken, (req, res) => {
     res.render("profile");
