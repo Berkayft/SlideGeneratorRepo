@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const model = require("./service/google");
 const passport = require('passport');
 const session = require('express-session');
+require("./service/authService");
 
 const slideRoutes = require("./routes/slide");
 require("dotenv").config();
