@@ -24,7 +24,7 @@ app = express();
 app.set('view engine', 'ejs');
 app.set("views", "templates");
 
-
+app.use(express.static('static'))
 
 app.use(express.json()); // JSON verilerini parse eder
 app.use(express.urlencoded({ extended: true }));

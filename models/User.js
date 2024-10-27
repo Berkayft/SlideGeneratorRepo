@@ -37,6 +37,10 @@ const userSchema = new mongoose.Schema({
         type: Number,
         default: 3,
         required: true
+    },
+    viewedCount: {
+        type: Number,
+        default: 0
     }
 }, { 
     timestamps: true 

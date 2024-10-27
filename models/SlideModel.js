@@ -23,6 +23,14 @@ const slideSchema = new mongoose.Schema({
     isPublic: {
         type: Boolean,
         default: false
+    },
+    downloadCount: {
+        type: Number,
+        default: 0
+    },
+    viewedCount: {
+        type: Number,
+        default: 0
     }
 });
 
