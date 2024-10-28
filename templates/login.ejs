@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Giriş Yap</title>
+    <title>Login</title>
     <style>
         * {
             margin: 0;
@@ -28,16 +28,28 @@
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
             width: 100%;
             max-width: 400px;
+            text-align: center;
         }
 
         h1 {
-            text-align: center;
             margin-bottom: 25px;
             color: #333;
         }
 
+        .logo {
+            display: inline-block;
+            margin-bottom: 15px;
+            cursor: pointer;
+        }
+
+        .logo img {
+            width: 60px;
+            height: 60px;
+        }
+
         .form-group {
             margin-bottom: 20px;
+            text-align: left;
         }
 
         label {
@@ -114,13 +126,16 @@
 </head>
 <body>
     <div class="container">
-        <h1>Giriş Yap</h1>
+        <a href="/index" class="logo">
+            <img src="/static/images/your-logo.png" alt="Site Logo">
+        </a>
+        <h1>Login</h1>
         <% if (typeof error !== 'undefined') { %>
             <div class="error"><%= error %></div>
         <% } %>
         <form id="loginForm" action="/login" method="POST">
             <div class="form-group">
-                <label for="email">E-posta</label>
+                <label for="email">Email</label>
                 <input 
                     type="email" 
                     id="email" 
@@ -129,7 +144,7 @@
                 >
             </div>
             <div class="form-group">
-                <label for="password">Şifre</label>
+                <label for="password">Password</label>
                 <input 
                     type="password" 
                     id="password" 
@@ -138,12 +153,12 @@
                 >
             </div>
             <div class="forgot-password">
-                <a href="/forgot-password">Şifremi Unuttum</a>
+                <a href="/forgot-password">Forgot Password?</a>
             </div>
-            <button type="submit">Giriş Yap</button>
+            <button type="submit">Login</button>
         </form>
         <div class="register-link">
-            Hesabınız yok mu? <a href="/register">Kayıt Ol</a>
+            Don't have an account? <a href="/register">Register</a>
         </div>
     </div>
 
@@ -154,7 +169,7 @@
             
             if (!emailRegex.test(email)) {
                 e.preventDefault();
-                alert('Geçerli bir e-posta adresi giriniz!');
+                alert('Please enter a valid email address!');
                 return false;
             }
         });

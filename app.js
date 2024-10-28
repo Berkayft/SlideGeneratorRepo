@@ -51,6 +51,18 @@ app.get("/about", (req , res) => {
     res.render("about");
 })
 
+app.get("/index", (req , res) => {
+    res.render("index");
+})
+
+app.get("/slideMenu", (req , res) => {
+    res.render("slideMenu");
+})
+
+app.get("/profile", (req , res) => {
+    res.render("profile");
+})
+
 app.listen(process.env.PORT , (req,res) => {
     console.log("hello");
 })
