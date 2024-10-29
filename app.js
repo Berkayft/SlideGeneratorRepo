@@ -44,6 +44,10 @@ app.get("/about", (req , res) => {
     res.render("about");
 });
 
+app.get("/slidehub", (req , res) => { /////// sonradan ekledim bunu routes a at
+    res.render("slidehub");
+});
+
 app.get("/faq", (req , res) => {
     res.render("faq");
 });
@@ -61,6 +65,7 @@ app.get("/slideMenu", (req , res) => {
 app.get("/profile", (req , res) => {
     res.render("profile");
 });
+
 
 app.listen(process.env.PORT , (req,res) => {
     console.log("hello");

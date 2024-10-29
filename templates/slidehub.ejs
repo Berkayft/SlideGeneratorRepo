@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Slides Hub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://unpkg.com/tailwindcss@2.2.4/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        /* Hover animasyonu için CSS */
+        .more-info {
+            transition: color 0.3s ease;
+        }
+        .more-info:hover {
+            color: #4ade80; /* Açık yeşil rengi */
+        }
+        /* Arka planda görünür logo */
+        /*.background-logo {
+            position: fixed; 
+            top: 50%;
+            left: 50%;
+            width: 100%;
+            height: 100%;
+            background: url('fluctos-2.svg') no-repeat center center;
+            background-size: contain; 
+            opacity: 0.1; 
+            transform: translate(-50%, -50%);
+            z-index: -1; 
+        }*/
+
+        /* Açıklama sınırı ve ayarı */
+        .description {
+            display: -webkit-box;
+            -webkit-line-clamp: 2; /* İki satır göster */
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            margin-bottom: 1rem; /* Açıklama ile değerin arasına boşluk ekle */
+        }
+
+        /* Kartın esnek yapısını ayarlama */
+        .card {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between; /* İçeriği yukarıda ve aşağıda yerleştir */
+            height: 100%; /* Kart yüksekliği */
+        }
+
+        /* İçerik alanı için minimum yükseklik */
+        .content-area {
+            flex-grow: 1; /* Kartın içeriği esnek olarak büyüsün */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between; /* İçerik yukarıda ve aşağıda yerleştir */
+        }
+    </style>
+</head>
+<body class="bg-gray-200 relative">
+    <%- include('navbarauthed') %>
+    <div class="background-logo mt-12"></div>
+
+    <% 
+    const users = [
+        { name: "Ensar Kulaç", value: 50, slideTitle: "Canlılar Ve Özellikleri", slideDescription: "Canlıların genel özellikleri anlatılır... Bu açıklama biraz uzadı. Buraya daha fazla metin ekleyerek açıklamanın uzunluğunu artırabiliriz." },
+        { name: "Berkay Fehmi Tekin", value: 20, slideTitle: "Hayvanlar Alemi", slideDescription: "Hayvanlar aleminin can alıcı noktalarına değinir." },
+        { name: "Mustafa Res", value: 12, slideTitle: "Su ve Yaşam", slideDescription: "Suyun yaşam için önemi anlatılır." },
+        { name: "Aslan aBİ", value: 13, slideTitle: "Eğitim ve Teknoloji", slideDescription: "Eğitim ve teknolojinin rolü açıklanır." }
+    ];
+    %>
+
+    <section class="text-gray-600 font-bold">
+        <div class="container px-5 py-5 mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <!-- Kart Bileşeni Başlangıcı -->
+                <% users.forEach((user, index) => { %>
+                <div class="border-2 border-gray-200 bg-gray-100 font-bold border-opacity-60 rounded-lg overflow-hidden card">
+                    <div class="w-full flex p-2 items-center">
+                        <div class="pl-2">
+                            <p class="font-bold text-lg mt-4 mb-4"><%= user.name %></p>
+                        </div>
+                    </div>
+                    <img class="lg:h-48 md:h-36 w-full object-cover object-center" src="slaid_image/<%= index + 1 %>.jpeg" alt="Slide Image"/>
+                    <div class="p-4 content-area"> <!-- İçerik alanı için yeni sınıf -->
+                        
+                        <h2 class="text-xs font-bold text-green-400 mb-1 uppercase">Slayt Başlığı</h2>
+                        <h1 class="text-lg font-medium text-gray-900 mb-3"><%= user.slideTitle %></h1>
+                        
+                        <h2 class="text-xs font-bold text-green-400 mb-1 uppercase">Açıklama</h2>
+                        <p class="text-gray-700 mb-3 description"><%= user.slideDescription %></p>
+                        
+                        <h2 class="text-xs font-bold text-green-400 mb-1 uppercase">Değer</h2>
+                        <h1 class="text-lg font-medium text-gray-900 mb-3"><%= user.value %></h1>
+                    </div>
+                    <div class="p-4"> <!-- More Info butonu için sabit alan -->
+                        <a href="/" class="more-info text-green-800 inline-flex items-center">More Info
+                            <svg class="w-4 h-4 ml-2" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M5 12h14"></path>
+                                <path d="M12 5l7 7-7 7"></path>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                <% }); %>
+                <!-- Kart Bileşeni Bitişi -->
+            </div>
+        </div>
+    </section>
+    <%- include('footer') %>
+</body>
+</html>
