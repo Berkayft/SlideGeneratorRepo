@@ -7,33 +7,62 @@
     <title>Profile</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Arka planda görünür logo */
+        .background-logo {
+            position: fixed; /* Sayfanın her yerine yerleştirmek için fixed konumu */
+            top: 50%;
+            left: 50%;
+            width: 100%;
+            height: 100%;
+            background: url('fluctos-2.svg') no-repeat center center;
+            background-size: contain; /* Logo boyutunu ortala */
+            opacity: 0.1; /* Saydamlık ayarı */
+            transform: translate(-50%, -50%); /* Ortalamak için */
+            z-index: -1; /* Arka planda olmasını sağlamak için */
+            
+        }
+        .profile-icon {
+            background-color: #f3f4f6; /* Tailwind CSS'de gray-100 rengi */
+            border-radius: 50%; /* Daire şekli için */
+            padding: 2px; /* İçi biraz boşluk bırak */
+        
+        }
+    </style>
 </head>
 
-<body class="bg-gray-100">
+<body class="bg-gray-200 relative">
+    <div class="background-logo"></div> <!-- Arka planda logo -->
+
     <!-- Navbar -->
-    <nav class="bg-white shadow-lg">
-        <div class="container mx-auto px-4 py-2 flex justify-between items-center">
-            <div class="flex items-center">
-                <a href="/" class="text-lg font-semibold text-gray-800 hover:text-gray-600">Home</a>
-                <a href="/slideHub" class="ml-6 text-lg font-semibold text-gray-800 hover:text-gray-600">SlideHub</a>
+    <nav class="relative container mx-auto p-6">
+        <div class="flex items-center justify-start">
+            <!-- Centered links for desktop -->
+            <div class="hidden md:flex space-x-10 justify-start flex-grow"> <!-- Alanları artırdık -->
+                <a href="/index" class="hover:bg-gray-300 px-4 py-3 rounded transition duration-200 font-bold text-lg">Home</a> <!-- Daha büyük font ve padding -->
+                <a href="/slideMenu" class="hover:bg-gray-300 px-4 py-3 rounded transition duration-200 font-bold text-lg">Slide Hub</a> <!-- Daha büyük font ve padding -->
             </div>
-            <div class="flex items-center">
+            <div class="flex items-center relative ml-auto">
+                <img src="profile_icon.svg" alt="Profile Icon" class="h-12 w-12 rounded-full transform  transition duration-200 mr-2">
                 <span class="text-lg text-gray-800 font-semibold mr-4"><%= user.fullName %></span>
-                <a href="/profile" class="text-gray-800 text-2xl hover:text-gray-600">&#128100;</a>
+                <a href="/logout" class="p-3 px-6 pt-2 rounded-full transition duration-300 font-bold bg-red-500 text-white hover:bg-red-600">Log Out</a>
             </div>
+        </div>
         </div>
     </nav>
 
     <!-- Profile Content -->
-    <div class="container mx-auto mt-8 px-4">
+    <div class="container mx-auto mt-12 px-4">
         <h1 class="text-2xl font-bold text-gray-800">My Slides</h1>
 
         <div class="flex flex-wrap mt-4">
             <% if (user.slides.length > 0) { %>
                 <% user.slides.forEach(function(slide) { %>
-                    <div class="bg-white shadow-md p-4 m-2 rounded-lg w-48 text-center">
-                        <a href="/slides/<%= slide._id %>" class="text-lg font-semibold text-gray-800 hover:text-blue-500">
-                            <%= slide.title %>
+                    <div class="bg-white shadow-md p-4 m-2 rounded-lg w-1/3 text-center">
+                        <a href="/slides/<%= slide._id %>">
+                            <img src="<%= slide.imageUrl || 'default_image_url.jpg' %>" alt="<%= slide.title %>" class="w-full h-32 object-cover rounded-lg">
+                            <h2 class="text-lg font-semibold text-gray-800 mt-2"><%= slide.title %></h2>
+                            <p class="text-gray-600">ID: <%= slide._id %></p>
                         </a>
                     </div>
                 <% }) %>
@@ -42,6 +71,26 @@
             <% } %>
         </div>
     </div>
+
+    <script>
+        // Show/Hide logout menu
+        document.getElementById('profileBtn').addEventListener('click', function() {
+            const menu = document.getElementById('logoutMenu');
+            menu.classList.toggle('hidden');
+        });
+
+        // Close the menu if clicked outside
+        window.onclick = function(event) {
+            if (!event.target.matches('#profileBtn')) {
+                const menus = document.getElementsByClassName('logoutMenu');
+                for (let i = 0; i < menus.length; i++) {
+                    if (!menus[i].classList.contains('hidden')) {
+                        menus[i].classList.add('hidden');
+                    }
+                }
+            }
+        };
+    </script>
 </body>
 
 </html>

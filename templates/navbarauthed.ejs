@@ -1,0 +1,67 @@
+<nav class="relative container mx-auto p-6">
+    <div class="flex items-center justify-between">
+        <div class="flex-shrink-0">
+            <a href="/index" id="logoLink">
+                <img src="fluctos.svg" alt="Logo" class="h-12">
+            </a>
+        </div>
+
+        <!-- Centered links for desktop -->
+        <div class="hidden md:flex space-x-6 justify-center flex-grow ml-40 mr-24">
+            <a href="/index" class="hover:bg-gray-300 px-3 py-2 rounded transition duration-200 font-bold">Home</a>
+            <a href="/slideMenu" class="hover:bg-gray-300 px-3 py-2 rounded transition duration-200 font-bold">Slides</a>
+            <a href="/about" class="hover:bg-gray-300 px-3 py-2 rounded transition duration-200 font-bold">About Us</a>
+        </div>
+
+        <!-- Profile icon and dropdown for authenticated users -->
+        <div class="hidden md:flex items-center space-x-2">
+            <a href="/profile" class="flex items-center space-x-2 p-3 font-bold transition duration-200 hover:bg-gray-200 rounded hover:scale-110">
+                <img src="profile_icon.svg" alt="Profile Icon" class="h-8 w-8 rounded-full transform  transition duration-200">
+                <span>Profile</span>
+            </a>
+            <a href="/logout" class="p-3 px-6 pt-2 rounded-full transition duration-300 font-bold bg-red-500 text-white hover:bg-red-600">Log Out</a>
+        </div>
+
+        <!-- Hamburger menu for smaller screens -->
+        <div class="md:hidden relative inline-block text-left">
+            <button id="auth-menu-button" type="button" class="inline-flex justify-center rounded-md bg-gray-100 px-3 py-2 text-gray-900 hover:bg-gray-200 focus:outline-none">
+                <span class="sr-only">Open menu</span>
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+                </svg>
+            </button>
+
+            <!-- Dropdown menu for smaller screens -->
+            <div id="authDropdownMenu" class="absolute right-0 z-10 mt-2 w-40 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 transform transition-transform duration-200 scale-95 opacity-0 hidden">
+                <a href="/index" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Home</a>
+                <a href="/slideMenu" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Slides</a>
+                <a href="/about" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">About Us</a>
+                <a href="/profile" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profile</a>
+                <a href="/logout" class="block px-4 py-2 text-sm text-red-500 hover:bg-red-100">Log Out</a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<script>
+    // Toggle for showing/hiding the authenticated dropdown menu
+    const authMenuButton = document.getElementById('auth-menu-button');
+    const authDropdownMenu = document.getElementById('authDropdownMenu');
+
+    authMenuButton.addEventListener('click', (event) => {
+        event.stopPropagation();
+        authDropdownMenu.classList.toggle('hidden');
+        setTimeout(() => {
+            authDropdownMenu.classList.toggle('scale-100', !authDropdownMenu.classList.contains('hidden'));
+            authDropdownMenu.classList.toggle('opacity-100', !authDropdownMenu.classList.contains('hidden'));
+        }, 10);
+    });
+
+    // Close the dropdown when clicking outside of it
+    document.addEventListener('click', (event) => {
+        if (!authMenuButton.contains(event.target) && !authDropdownMenu.contains(event.target)) {
+            authDropdownMenu.classList.add('hidden');
+            authDropdownMenu.classList.remove('scale-100', 'opacity-100');
+        }
+    });
+</script>

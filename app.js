@@ -5,7 +5,7 @@ const model = require("./service/google");
 const passport = require('passport');
 const session = require('express-session');
 require("./service/authService");
-
+const flash = require('connect-flash'); // Flash kütüphanesini ekleyin
 const slideRoutes = require("./routes/slide");
 require("dotenv").config();
 
@@ -14,12 +14,7 @@ const chatRoutes = require("./routes/chat");
 const profileRoutes = require("./routes/profile");
 const authRoutes = require("./routes/authRoute");
 
-
-
 app = express();
-
-
-
 
 app.set('view engine', 'ejs');
 app.set("views", "templates");
@@ -29,7 +24,6 @@ app.use(express.static('static'))
 app.use(express.json()); // JSON verilerini parse eder
 app.use(express.urlencoded({ extended: true }));
 
-
 app.use(session({
     secret: 'MysecretKey',  // Bu anahtarı güvenli bir şekilde saklayın
     resave: false,            // Her request'te oturumu yeniden kaydetme
@@ -38,7 +32,7 @@ app.use(session({
 
 app.use(passport.initialize());
 app.use(passport.session());
-
+app.use(flash());  // Flash middleware'ını burada kullanın
 
 app.use("/" , indexRoutes);
 app.use("/chat", chatRoutes);
@@ -46,25 +40,28 @@ app.use("/profile" , profileRoutes);
 app.use("/", slideRoutes);
 app.use("/" , authRoutes);
 
-
 app.get("/about", (req , res) => {
     res.render("about");
-})
+});
 
-app.get("/index", (req , res) => {
-    res.render("index");
-})
+app.get("/faq", (req , res) => {
+    res.render("faq");
+});
+
+app.get('/index', (req, res) => {
+    const isLoggedIn = req.session.isLoggedIn || false; // Oturum açma durumu kontrolü
+    const flashMessages = req.flash('info'); // Flash mesajlarını alın
+    res.render('index', { isLoggedIn, flashMessages }); // Flash mesajlarını render edin
+});
 
 app.get("/slideMenu", (req , res) => {
     res.render("slideMenu");
-})
+});
 
 app.get("/profile", (req , res) => {
     res.render("profile");
-})
+});
 
 app.listen(process.env.PORT , (req,res) => {
     console.log("hello");
-})
-
-
+});

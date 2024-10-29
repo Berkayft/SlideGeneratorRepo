@@ -31,6 +31,11 @@ const slideSchema = new mongoose.Schema({
     viewedCount: {
         type: Number,
         default: 0
+    },
+    imageUrl: { // New field for slide image URL
+        type: String,
+        required: true, // Set to true if you want this field to be mandatory
+        trim: true
     }
 });
 
