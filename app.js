@@ -44,13 +44,22 @@ app.get("/about", (req , res) => {
     res.render("about");
 });
 
-app.get("/slidehub", (req , res) => { /////// sonradan ekledim bunu routes a at
-    res.render("slidehub");
-});
-
-app.get("/faq", (req , res) => {
-    res.render("faq");
-});
+app.get("/slidehub" , (req , res) => {
+    if(req.isAuthenticated()){
+        res.render("slidehub" , {navbar:"navbarauthed"});
+    }else{
+        res.render("slidehub" , {navbar:"navbar"})
+    }
+    
+})
+app.get("/faq" , (req , res) => {
+    if(req.isAuthenticated()){
+        res.render("faq" , {navbar:"navbarauthed"});
+    }else{
+        res.render("faq" , {navbar:"navbar"})
+    }
+    
+})
 
 
 
