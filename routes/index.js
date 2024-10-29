@@ -4,7 +4,12 @@ const router = express.Router();
 
 
 router.get("/" , (req , res) => {
-    res.render("index");
+    if(req.isAuthenticated()){
+        res.render("index" , {navbar:"navbarauthed"});
+    }else{
+        res.render("index" , {navbar:"navbar"})
+    }
+    
 })
 
 

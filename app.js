@@ -52,11 +52,7 @@ app.get("/faq", (req , res) => {
     res.render("faq");
 });
 
-app.get('/index', (req, res) => {
-    const isLoggedIn = req.session.isLoggedIn || false; // Oturum açma durumu kontrolü
-    const flashMessages = req.flash('info'); // Flash mesajlarını alın
-    res.render('index', { isLoggedIn, flashMessages }); // Flash mesajlarını render edin
-});
+
 
 app.get("/slideMenu", (req , res) => {
     res.render("slideMenu");
