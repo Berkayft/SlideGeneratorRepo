@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const uploadPdf = require("../middleware/pdfUpload");
+const sendPdf = require("../middleware/pdfSend");
 const fs = require("fs");
 
 // Diğer route'lar...
@@ -11,14 +12,12 @@ router.get("/generation" , (req , res) => {
 
 
 
-router.post('/upload', uploadPdf.single('pdf'), (req, res) => {
+router.post('/upload', uploadPdf.single('pdf'), async (req, res) => {
     if (!req.file) {
       return res.status(400).json({ error: 'Dosya yüklenemedi' });
     }
-    res.json({ 
-      message: 'Dosya başarıyla yüklendi',
-      filename: req.file.filename
-    });
+    await sendPdf(req.file.filename);
+    res.redirect("/profile");
   });
 
 
