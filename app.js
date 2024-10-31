@@ -37,7 +37,7 @@ app.use(flash());  // Flash middleware'ını burada kullanın
 app.use("/" , indexRoutes);
 app.use("/chat", chatRoutes);
 app.use("/profile" , profileRoutes);
-app.use("/", slideRoutes);
+app.use("/slide", slideRoutes);
 app.use("/" , authRoutes);
 
 app.get("/about", (req , res) => {
