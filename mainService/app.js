@@ -64,15 +64,17 @@ app.get("/faq" , (req , res) => {
     
 })
 
+app.get("/moreInfo" , (req , res) => {
+    res.render("moreInfo");
+})
 
-
-app.get("/profile", (req , res) => {
+app.get("/profile", isAuthenticated, (req , res) => {
     res.render("profile");
 });
 
 
 
-app.get("/uploadPdf", (req , res) => {
+app.get("/uploadPdf", isAuthenticated, (req , res) => {
     res.render("uploadPdf");
 });
 

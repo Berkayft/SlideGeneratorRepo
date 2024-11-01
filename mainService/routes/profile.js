@@ -7,7 +7,7 @@ router.get("/", (req, res) => {
     if (!req.isAuthenticated()) {
         return res.redirect("/login");
     }
-    res.render("profile", { user: req.user });
+    res.render("profile", { user: req.user , navbar: "navbarauthed" });
 });
 // Token satın alma işlemi
 router.post("/buytoken", isAuth, buyToken, (req, res) => {
