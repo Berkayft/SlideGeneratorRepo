@@ -8,7 +8,7 @@ const pdfSend = async (filepath) => {
     try{
         const form = new FormData();
 
-        form.append("file",fs.createReadStream(filepath));
+        form.append("file",fs.createReadStream("uploads/"+filepath));
 
         const response = await axios.post(process.env.PDFSERVERURL, form, {
             headers: {
