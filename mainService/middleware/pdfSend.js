@@ -15,7 +15,8 @@ const pdfSend = async (filepath) => {
             headers: {
                 ...form.getHeaders(),
                 'Authorization': `Bearer ${process.env.PDFPROCESSKEY}`
-            }
+            },
+            timeout: 60000
         });
     }
     catch (error){
