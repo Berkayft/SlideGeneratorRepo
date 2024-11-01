@@ -81,6 +81,13 @@ app.get("/uploadPdf", (req , res) => {
     res.render("uploadPdf");
 });
 
+app.get('/health', (req, res) => {
+    res.status(200).json({
+        status: 'healthy',
+        timestamp: new Date().toISOString()
+    });
+});
+
 
 app.listen(process.env.PORT , (req,res) => {
     console.log("hello");

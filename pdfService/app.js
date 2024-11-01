@@ -68,7 +68,12 @@ app.get("/" , (req, res) => {
   res.render("deneme");
 } )
 
-
+app.get('/health', (req, res) => {
+    res.status(200).json({
+        status: 'healthy',
+        timestamp: new Date().toISOString()
+    });
+});
 
 // (async () => {
 //      try {
