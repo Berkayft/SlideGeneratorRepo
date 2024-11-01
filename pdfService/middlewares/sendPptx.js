@@ -15,7 +15,7 @@ const pptxSend = async (filepath) => {
                 ...form.getHeaders(),
                 'Authorization': `Bearer ${process.env.MAINPROCESSKEY}`
             },
-            timeout: 60000
+            timeout: 180000
         });
     }
     catch (error){

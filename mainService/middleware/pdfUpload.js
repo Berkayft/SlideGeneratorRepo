@@ -14,7 +14,7 @@ const storage = multer.diskStorage({
     },
     filename: function (req, file, cb) {
       // Dosya adını timestamp ile birlikte kaydet
-      cb(null, Date.now() + '-' + file.originalname);
+      cb(null, Date.now() + '-' + req.user.id+".pdf");
     }
   });
 

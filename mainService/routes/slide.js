@@ -3,6 +3,8 @@ const router = express.Router();
 const uploadPdf = require("../middleware/pdfUpload");
 const sendPdf = require("../middleware/pdfSend");
 const fs = require("fs");
+const { User , SlideModel } = require("../models/Model");
+const isAuthenticated = require("../middleware/authMiddleware");
 
 // Diğer route'lar...
 router.get("/generation" , (req , res) => {
@@ -12,10 +14,20 @@ router.get("/generation" , (req , res) => {
 
 
 
-router.post('/upload', uploadPdf.single('pdf'), async (req, res) => {
+router.post('/upload', isAuthenticated ,uploadPdf.single('pdf'), async (req, res) => {
     if (!req.file) {
       return res.status(400).json({ error: 'Dosya yüklenemedi' });
     }
+    const title = req.body.name;
+    const description = req.body.description;
+    const user = await User.findById(req.user._id);
+    const slideModel = await SlideModel.create({
+      title: title,
+      description: description,
+      user: user._id // yalnızca user ID eklenir
+    });
+    user.slides.push(slideModel._id);
+    await user.save();
     await sendPdf(req.file.filename);
     res.redirect("/profile");
   });

@@ -3,6 +3,7 @@ const router = express();
 const fs = require("fs");
 const path = require("path");
 const multer = require("multer");
+const { User , SlideModel } = require("../models/Model");
 
 
 const uploadDir = path.join('uploads/pptx/');
@@ -45,6 +46,13 @@ router.post('/upload-pptx', upload.single('file'), async (req, res) => {
         res.status(200).send('File received successfully');
 
         console.log(file.filename);
+        user_id = file.filename.split('-')[1].split('.')[0];
+        const user = await User.findById(user_id);
+        const slide_id = user.slides[user.slides.length-1];
+        const theslide = await SlideModel.findById(slide_id);
+        theslide.filepath = file.filename;
+        await theslide.save();
+
         //DB işlemleri
 
     } catch (error) {

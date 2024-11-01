@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const slideSchema = new mongoose.Schema({
     filepath: {
         type: String,
-        required: true,
+        required: false,
         trim: true
     },
     user: {
@@ -16,6 +16,11 @@ const slideSchema = new mongoose.Schema({
         default: Date.now
     },
     title: {
+        type: String,
+        trim: true,
+        default: 'Untitled Slide'
+    },
+    description: {
         type: String,
         trim: true,
         default: 'Untitled Slide'
@@ -34,7 +39,7 @@ const slideSchema = new mongoose.Schema({
     },
     imageUrl: { // New field for slide image URL
         type: String,
-        required: true, // Set to true if you want this field to be mandatory
+        required: false, // Set to true if you want this field to be mandatory
         trim: true
     }
 });

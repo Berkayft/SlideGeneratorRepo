@@ -15,6 +15,8 @@ const profileRoutes = require("./routes/profile");
 const authRoutes = require("./routes/authRoute");
 const pptxRoutes = require("./routes/pptxRoutes");
 
+const isAuthenticated = require("./middleware/authMiddleware");
+
 app = express();
 
 app.set('view engine', 'ejs');
@@ -36,9 +38,8 @@ app.use(passport.session());
 app.use(flash());  // Flash middleware'ını burada kullanın
 
 app.use("/" , indexRoutes);
-app.use("/chat", chatRoutes);
-app.use("/profile" , profileRoutes);
-app.use("/slide", slideRoutes);
+app.use("/profile" ,isAuthenticated, profileRoutes);
+app.use("/slide",isAuthenticated, slideRoutes);
 app.use("/" , authRoutes);
 app.use("/",pptxRoutes);
 
@@ -65,17 +66,11 @@ app.get("/faq" , (req , res) => {
 
 
 
-app.get("/slideMenu", (req , res) => {
-    res.render("slideMenu");
-});
-
 app.get("/profile", (req , res) => {
     res.render("profile");
 });
 
-app.get("/profileholder", (req , res) => {
-    res.render("profileholder");
-});
+
 
 app.get("/uploadPdf", (req , res) => {
     res.render("uploadPdf");

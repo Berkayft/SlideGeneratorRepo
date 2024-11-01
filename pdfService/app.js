@@ -32,7 +32,12 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-app.post('/upload-pdf', upload.single('file'), async (req, res) => {
+const checkMiddleware = (req , res ,next) => {
+    console.log("post request came");
+    next();
+}
+
+app.post('/upload-pdf' , upload.single('file'), async (req, res) => {
     try {
         const authHeader = req.headers['authorization'];
         if (!authHeader) {
