@@ -1,4 +1,4 @@
-<nav class="relative container mx-auto p-6">
+<nav class="relative container mx-auto p-6 ">
     <div class="flex items-center justify-between">
         <div class="flex-shrink-0">
             <a href="/" id="logoLink">
@@ -24,44 +24,75 @@
 
         <!-- Hamburger menu for smaller screens -->
         <div class="md:hidden relative inline-block text-left">
-            <button id="auth-menu-button" type="button" class="inline-flex justify-center rounded-md bg-gray-100 px-3 py-2 text-gray-900 hover:bg-gray-200 focus:outline-none">
+            <button id="menu-button" type="button" class="inline-flex justify-center rounded-md bg-gray-100 px-3 py-2 text-gray-900 hover:bg-gray-200 focus:outline-none" aria-expanded="true" aria-haspopup="true">
                 <span class="sr-only">Open menu</span>
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
                 </svg>
             </button>
 
-            <!-- Dropdown menu for smaller screens -->
-            <div id="authDropdownMenu" class="absolute right-0 z-10 mt-2 w-40 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 transform transition-transform duration-200 scale-95 opacity-0 hidden">
-                <a href="/" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Home</a>
-                <a href="/slideMenu" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Slides</a>
-                <a href="/about" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">About Us</a>
-                <a href="/profile" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profile</a>
-                <a href="/logout" class="block px-4 py-2 text-sm text-red-500 hover:bg-red-100">Log Out</a>
+            <!-- Dropdown menu -->
+            <div id="dropdownMenu" class="absolute right-0 z-10 mt-2 w-40 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 transform transition-transform duration-200 scale-95 opacity-0 hidden" role="menu" aria-orientation="vertical" aria-labelledby="menu-button">
+                <a href="/" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Home</a>
+                <a href="/slidehub" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Slides</a>
+                <a href="/about" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">About Us</a>
             </div>
         </div>
     </div>
 </nav>
 
-<script>
-    // Toggle for showing/hiding the authenticated dropdown menu
-    const authMenuButton = document.getElementById('auth-menu-button');
-    const authDropdownMenu = document.getElementById('authDropdownMenu');
 
-    authMenuButton.addEventListener('click', (event) => {
+
+   
+
+<!-- Fullscreen Dropdown Menu -->
+<div id="fullscreenMenu" class="fixed inset-0 z-20 bg-white bg-opacity-95 flex flex-col items-center justify-center transform scale-95 opacity-0 hidden transition-all duration-100 ease-out">
+    <a href="/" class="menu-item text-2xl font-semibold text-gray-800 hover:text-green-500 mb-4 opacity-0 transform translate-y-4 transition-all duration-100">Home</a>
+    <a href="/slidehub" class="menu-item text-2xl font-semibold text-gray-800 hover:text-green-500 mb-4 opacity-0 transform translate-y-4 transition-all duration-100 delay-100">Slide Hub</a>
+    <a href="/about" class="menu-item text-2xl font-semibold text-gray-800 hover:text-green-500 mb-4 opacity-0 transform translate-y-4 transition-all duration-100 delay-200">About Us</a>
+    
+    <!-- Bottom aligned buttons -->
+    <div class="mt-10 flex space-x-4"> <!-- Flex düzeni ile yan yana -->
+        <a href="/profile" class="menu-item block text-center w-32 h-10 p-2 bg-green-400 text-white rounded-lg hover:bg-green-300 opacity-0 transform translate-y-4 transition-all duration-100 delay-300">Profile</a>
+        <a href="/logout" class="menu-item block text-center w-32 h-10 p-2 bg-red-500 text-white rounded-lg hover:bg-red-600 opacity-0 transform translate-y-4 transition-all duration-100 delay-400">Log Out</a>
+    </div>
+</div>
+<script>
+    // Toggle for showing/hiding the fullscreen menu
+    const menuButton = document.getElementById('menu-button');
+    const fullscreenMenu = document.getElementById('fullscreenMenu');
+    const menuItems = document.querySelectorAll('.menu-item'); // Menü öğelerini seç
+
+    menuButton.addEventListener('click', (event) => {
         event.stopPropagation();
-        authDropdownMenu.classList.toggle('hidden');
-        setTimeout(() => {
-            authDropdownMenu.classList.toggle('scale-100', !authDropdownMenu.classList.contains('hidden'));
-            authDropdownMenu.classList.toggle('opacity-100', !authDropdownMenu.classList.contains('hidden'));
-        }, 10);
+        fullscreenMenu.classList.toggle('hidden');
+        
+        if (!fullscreenMenu.classList.contains('hidden')) {
+            // Menü açıldığında animasyonu başlat
+            setTimeout(() => {
+                fullscreenMenu.classList.add('scale-100', 'opacity-100');
+                menuItems.forEach((item, index) => {
+                    item.classList.add('opacity-100', 'translate-y-0'); // Animasyon sınıflarını ekle
+                });
+            }, 10);
+        } else {
+            // Menü kapandığında animasyonu sıfırla
+            fullscreenMenu.classList.remove('scale-100', 'opacity-100');
+            menuItems.forEach((item) => {
+                item.classList.remove('opacity-100', 'translate-y-0'); // Animasyon sınıflarını kaldır
+            });
+        }
     });
 
-    // Close the dropdown when clicking outside of it
+    // Close the menu when clicking outside of specific items
     document.addEventListener('click', (event) => {
-        if (!authMenuButton.contains(event.target) && !authDropdownMenu.contains(event.target)) {
-            authDropdownMenu.classList.add('hidden');
-            authDropdownMenu.classList.remove('scale-100', 'opacity-100');
+        const clickedOutsideMenuItems = !Array.from(menuItems).some(item => item.contains(event.target));
+        if (clickedOutsideMenuItems && !menuButton.contains(event.target)) {
+            fullscreenMenu.classList.add('hidden');
+            fullscreenMenu.classList.remove('scale-100', 'opacity-100');
+            menuItems.forEach((item) => {
+                item.classList.remove('opacity-100', 'translate-y-0'); // Animasyonu sıfırla
+            });
         }
     });
 </script>
