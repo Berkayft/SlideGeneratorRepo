@@ -4,16 +4,16 @@ const FormData = require('form-data');
 const fs = require('fs');
 
 
-const pdfSend = async (filepath) => {
+const pptxSend = async (filepath) => {
     try{
         const form = new FormData();
 
-        form.append("file",fs.createReadStream("uploads/"+filepath));
+        form.append("file",fs.createReadStream(filepath));
 
-        const response = await axios.post(process.env.PDFSERVERURL, form, {
+        const response = await axios.post(process.env.MAINSERVERURL, form, {
             headers: {
                 ...form.getHeaders(),
-                'Authorization': `Bearer ${process.env.PDFPROCESSKEY}`
+                'Authorization': `Bearer ${process.env.MAINPROCESSKEY}`
             }
         });
     }
@@ -23,4 +23,4 @@ const pdfSend = async (filepath) => {
 }
     
 
-module.exports = pdfSend;
+module.exports = pptxSend;

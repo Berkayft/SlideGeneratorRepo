@@ -5,7 +5,7 @@ const multer = require("multer");
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-      const uploadDir = 'uploads/';
+      const uploadDir = 'uploads/pdf/';
       // Uploads klasörü yoksa oluştur
       if (!fs.existsSync(uploadDir)) {
         fs.mkdirSync(uploadDir);

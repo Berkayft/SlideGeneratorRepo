@@ -1,2 +1,9 @@
-node_modules/
-.env
+# mainService için özel ignore
+mainService/node_modules/
+mainService/npm-debug.log
+mainService/.env
+
+# pdfService için özel ignore
+pdfService/node_modules/
+pdfService/npm-debug.log
+pdfService/.env

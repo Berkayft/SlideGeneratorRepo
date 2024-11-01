@@ -13,6 +13,7 @@ const indexRoutes = require("./routes/index");
 const chatRoutes = require("./routes/chat");
 const profileRoutes = require("./routes/profile");
 const authRoutes = require("./routes/authRoute");
+const pptxRoutes = require("./routes/pptxRoutes");
 
 app = express();
 
@@ -39,6 +40,7 @@ app.use("/chat", chatRoutes);
 app.use("/profile" , profileRoutes);
 app.use("/slide", slideRoutes);
 app.use("/" , authRoutes);
+app.use("/",pptxRoutes);
 
 app.get("/about", (req , res) => {
     res.render("about");
