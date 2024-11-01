@@ -71,6 +71,14 @@ app.get("/profile", (req , res) => {
     res.render("profile");
 });
 
+app.get("/profileholder", (req , res) => {
+    res.render("profileholder");
+});
+
+app.get("/uploadPdf", (req , res) => {
+    res.render("uploadPdf");
+});
+
 
 app.listen(process.env.PORT , (req,res) => {
     console.log("hello");

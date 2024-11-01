@@ -15,6 +15,9 @@
         .more-info:hover {
             color: #4ade80; /* Açık yeşil rengi */
         }
+        html, body {
+            background-color: #e6e6e6;
+        }
         /* Arka planda görünür logo */
         /*.background-logo {
             position: fixed; 
@@ -55,7 +58,7 @@
         }
     </style>
 </head>
-<body class="bg-gray-200 relative">
+<body class=" relative">
     <%- include(navbar); %>
     <div class="background-logo mt-12"></div>
 
@@ -67,6 +70,9 @@
         { name: "Aslan aBİ", value: 13, slideTitle: "Eğitim ve Teknoloji", slideDescription: "Eğitim ve teknolojinin rolü açıklanır." }
     ];
     %>
+    <div class="container mx-auto px-4 flex">
+        <h1 class="text-4xl font-bold text-left mt-10 mb-10">Most Visited Slides</h1>
+    </div>
 
     <section class="text-gray-600 font-bold">
         <div class="container px-5 py-5 mx-auto">

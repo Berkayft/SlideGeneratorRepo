@@ -33,7 +33,7 @@
     <title>FAQ</title>
 </head>
 <body>
-    <%- include('navbar') %>
+    <%- include(navbar) %>
     <section class="py-24">
         <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div class="flex flex-col justify-center items-center gap-x-16 gap-y-5 xl:gap-28 lg:flex-row lg:justify-between max-lg:max-w-2xl mx-auto max-w-full">
@@ -43,22 +43,21 @@
                 <div class="w-full lg:w-1/2">
                     <div class="lg:max-w-xl">
                         <div class="mb-6 lg:mb-16">
-                            <h6 class="text-lg text-center font-medium text-indigo-600 mb-2 lg:text-left">Frequently Asked Questions</h6>
+                            <h6 class="text-lg text-center font-bold text-green-500 mb-2 lg:text-left">Frequently Asked Questions</h6>
                             <h2 class="text-4xl text-center font-bold text-gray-900 leading-[3.25rem] mb-5 lg:text-left">Looking for answers?</h2>
                         </div>
-                        <div class="accordion-group" data-accordion="default-accordion">
-                            <div class="accordion pb-8 border-b border-solid border-gray-200">
-                                <button class="accordion-toggle group inline-flex items-center justify-between text-xl font-normal leading-8 text-gray-600 w-full transition duration-500 hover:text-indigo-600" aria-controls="basic-collapse-one">
-                                    <h5>How to create an account?</h5>
-                                    <svg class="arrow text-gray-900 transition duration-500 group-hover:text-indigo-600" width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M16.5 8.25L12.4142 12.3358C11.7475 13.0025 11.4142 13.3358 11 13.3358C10.5858 13.3358 10.2525 13.0025 9.58579 12.3358L5.5 8.25" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path>
-                                    </svg>
-                                </button>
-                                <div id="basic-collapse-one" class="accordion-content" aria-labelledby="basic-heading-one">
-                                    <p class="text-base font-normal text-gray-600">To create an account, find the 'Sign up' or 'Create account' button, fill out the registration form with your personal information, and click 'Create account' or 'Sign up.' Verify your email address if needed, and then log in to start using the platform.</p>
-                                </div>
+                        <div class="accordion py-8  p-4 border-b border-solid border-gray-200 bg-gray-300 rounded-lg min-h-24 flex flex-col justify-between my-4">
+                            <button class="accordion-toggle group inline-flex items-center justify-between text-xl font-normal leading-8 text-gray-600 w-full transition duration-500 hover:text-indigo-600" aria-controls="basic-collapse-one">
+                                <h5>How to create an account?</h5>
+                                <svg class="arrow text-gray-900 transition duration-500 group-hover:text-indigo-600" width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M16.5 8.25L12.4142 12.3358C11.7475 13.0025 11.4142 13.3358 11 13.3358C10.5858 13.3358 10.2525 13.0025 9.58579 12.3358L5.5 8.25" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path>
+                                </svg>
+                            </button>
+                            <div id="basic-collapse-one" class="accordion-content" aria-labelledby="basic-heading-one">
+                                <p class="text-base font-normal text-gray-600">To create an account, find the 'Sign up' or 'Create account' button, fill out the registration form with your personal information, and click 'Create account' or 'Sign up.' Verify your email address if needed, and then log in to start using the platform.</p>
                             </div>
-                            <div class="accordion py-8 border-b border-solid border-gray-200">
+                        </div>
+                            <div class="accordion py-8  p-4 border-b border-solid border-gray-200 bg-gray-300 rounded-lg min-h-24 flex flex-col justify-between my-4">
                                 <button class="accordion-toggle group inline-flex items-center justify-between font-normal text-xl leading-8 text-gray-600 w-full transition duration-500 hover:text-indigo-600" aria-controls="basic-collapse-two">
                                     <h5>Have any trust issue?</h5>
                                     <svg class="arrow text-gray-900 transition duration-500 group-hover:text-indigo-600" width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -69,7 +68,7 @@
                                     <p class="text-base text-gray-500 font-normal">Our focus on providing robust and user-friendly content management capabilities ensures that you can manage your content with confidence, and achieve your content marketing goals with ease.</p>
                                 </div>
                             </div>
-                            <div class="accordion py-8 border-b border-solid border-gray-200">
+                            <div class="accordion py-8  p-4 border-b border-solid border-gray-200 bg-gray-300 rounded-lg min-h-24 flex flex-col justify-between my-4">
                                 <button class="accordion-toggle group inline-flex items-center justify-between text-xl font-normal leading-8 text-gray-600 w-full transition duration-500 hover:text-indigo-600" aria-controls="basic-collapse-three">
                                     <h5>How can I reset my password?</h5>
                                     <svg class="arrow text-gray-900 transition duration-500 group-hover:text-indigo-600" width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -80,7 +79,7 @@
                                     <p class="text-base text-gray-500 font-normal">To reset your password, go to the 'Forgot password?' link on the login page, enter your registered email address, and follow the instructions sent to your email to create a new password.</p>
                                 </div>
                             </div>
-                            <div class="accordion py-8">
+                            <div class="accordion py-8 p-4 border-b border-solid border-gray-200 bg-gray-300 rounded-lg min-h-24 flex flex-col justify-between my-4">
                                 <button class="accordion-toggle group inline-flex items-center justify-between text-xl font-normal leading-8 text-gray-600 w-full transition duration-500 hover:text-indigo-600" aria-controls="basic-collapse-four">
                                     <h5>What is the payment process?</h5>
                                     <svg class="arrow text-gray-900 transition duration-500 group-hover:text-indigo-600" width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
