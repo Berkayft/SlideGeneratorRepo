@@ -5,16 +5,16 @@ class ContentArea {
             this.type = typeOrObject.type;
             this.x = typeOrObject.x;
             this.y = typeOrObject.y;
-            this.width = typeOrObject.width;
-            this.height = typeOrObject.height;
+            this.w = typeOrObject.width;
+            this.h = typeOrObject.height;
             this.options = typeOrObject.options || {};
         } else {
             // Eğer tek tek argümanlar geçildiyse
             this.type = typeOrObject;
             this.x = x;
             this.y = y;
-            this.width = width;
-            this.height = height;
+            this.w = width;
+            this.h = height;
             this.options = options;
         }
     }
@@ -24,8 +24,8 @@ class ContentArea {
             type: this.type,
             x: this.x,
             y: this.y,
-            width: this.width,
-            height: this.height,
+            w: this.w,
+            h: this.h,
             options: this.options
         };
     }
