@@ -5,6 +5,8 @@ const sendPdf = require("../middleware/pdfSend");
 const fs = require("fs");
 const { User , SlideModel } = require("../models/Model");
 const isAuthenticated = require("../middleware/authMiddleware");
+const { spendToken } = require("../middleware/moneyMiddleware");
+const path = require("path");
 
 
 router.use(express.urlencoded({ extended: true }));
@@ -33,14 +35,15 @@ router.post('/upload', isAuthenticated ,uploadPdf.single('pdf'), async (req, res
     user.slides.push(slideModel._id);
     await user.save();
     await sendPdf(req.file.filename);
+    await spendToken(req.user._id);
     res.redirect("/profile");
   });
 
 
 router.get('/download/:filename', (req, res) => {
     const filename = req.params.filename;
-    const filePath = path.join(__dirname, 'uploads', filename);
-  
+    const filePath = path.join('uploads',"pptx", filename);
+    console.log(filePath);
     // Dosyanın varlığını kontrol et
     if (!fs.existsSync(filePath)) {
       return res.status(404).json({ error: 'Dosya bulunamadı' });

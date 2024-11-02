@@ -75,26 +75,42 @@ app.get("/faq" , (req , res) => {
     
 })
 
-app.get("/moreInfo/:filepath", async (req, res) => {
-    const { filepath } = req.params; // Get the filepath from the request parameters
+app.get("/moreInfo/:filepath", isAuthenticated, async (req, res) => {
+    const { filepath } = req.params;
 
     try {
         // Find the slide in the database using the filepath
         const slide = await SlideModel.findOne({ filepath: filepath }).exec();
-        
+
+        // Check if slide was found
         if (!slide) {
             return res.status(404).send("Slide not found"); // Handle the case where the slide does not exist
         }
 
+        // Find the user associated with the slide
+        const user = await User.findById(slide.user);
+
         // Render the moreInfo view with the slide data
-        res.render("moreInfo", { slide });
+        res.render("moreInfo", { slide: slide, user: user });
     } catch (error) {
         console.error(error);
         res.status(500).send("Server Error"); // Handle server errors
     }
 });
 
-
+app.get("/changeStatus/:filepath" , isAuthenticated , async (req , res) => {
+    const { filepath } = req.params;
+    const slide = await SlideModel.findOne({ filepath: filepath }).exec();
+    if(slide.isPublic == false) {
+        slide.isPublic = true;
+    }else {
+        slide.isPublic = false;
+    }
+    console.log(slide.isPublic);
+    await slide.save();
+    
+    res.redirect("/profile");
+})
 
 
 app.get("/uploadPdf", isAuthenticated, (req , res) => {

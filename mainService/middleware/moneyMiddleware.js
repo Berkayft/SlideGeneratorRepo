@@ -3,42 +3,47 @@ const { User } = require("../models/Model");
 
 const buyToken = async (req, res, next) => {
     try {
-        // Kullanıcıyı ID'si ile veritabanından buluyoruz
+        // Find user by their ID
         const user = await User.findById(req.user._id);
-        
+
+        // Check if user exists
         if (!user) {
             return res.status(404).send("User not found");
         }
-        const count = req.body.count;
-        // Token sayısını arttırıyoruz
-        user.tokenCount += count;
 
-        // Güncellemeyi veritabanına kaydediyoruz
+        // Increase the token count by 10
+        user.tokenCount = (user.tokenCount || 0) + 10;
+
+        // Save the updated user document
         await user.save();
 
+        // Move to the next middleware/route handler
         next();
     } catch (error) {
-        // Hata durumunda hata mesajını geri döndür
-        return res.status(500).send("Error updating token count");
+        console.error("Error in buyToken middleware:", error);
+        res.status(500).send("Internal Server Error");
     }
 };
 
-const spendToken = async (req, res, next) => {
+const spendToken = async (user_id) => {
     try {
         // Kullanıcıyı ID'si ile veritabanından buluyoruz
-        const user = await User.findById(req.user._id);
+        const user = await User.findById(user_id);
         
         if (!user) {
             return res.status(404).send("User not found");
         }
-        const count = req.body.count;
         // Token sayısını azaltıyoruz
-        user.tokenCount -= count;
+        user.tokenCount = (user.tokenCount || 0) - 1;
+
+        if(user.tokenCount < 0) {
+            user.tokenCount = 0;
+        }
+
 
         // Güncellemeyi veritabanına kaydediyoruz
         await user.save();
 
-        next();
     } catch (error) {
         // Hata durumunda hata mesajını geri döndür
         return res.status(500).send("Error updating token count");

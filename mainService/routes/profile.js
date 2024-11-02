@@ -14,10 +14,11 @@ router.get("/", async (req, res) => {
     res.render("profile", { user: req.user , navbar: "navbarauthed" , slides: userSlides });
 });
 // Token satın alma işlemi
-router.post("/buytoken", isAuth, buyToken, (req, res) => {
-    res.render("profile");
+
+// Route handler with the buyToken middleware
+router.get("/buytoken", isAuth, buyToken, (req, res) => {
+    res.redirect("/profile");
 });
 
-// Slide sayfası
-
 module.exports = router;
+
