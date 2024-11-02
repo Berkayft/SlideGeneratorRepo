@@ -82,33 +82,35 @@
     });
 
     document.getElementById('uploadForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        
-        if (!fileInput.files[0]) {
-            messageDiv.innerHTML = '<p class="text-red-600">Please select a file.</p>';
-            return;
+    e.preventDefault();
+    
+    if (!fileInput.files[0]) {
+        messageDiv.innerHTML = '<p class="text-red-600">Please select a file.</p>';
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append('pdf', fileInput.files[0]);
+    formData.append('name', document.querySelector('input[name="name"]').value); // Add slide name
+    formData.append('description', document.querySelector('textarea[name="description"]').value); // Add slide description
+
+    try {
+        const response = await axios.post('/slide/upload', formData, {
+            headers: { 'Content-Type': 'multipart/form-data' }
+        });
+
+        if (response.status === 200) {
+            messageDiv.innerHTML = '<p class="text-green-600">File uploaded successfully.</p>';
+            loadFileList();
+        } else {
+            messageDiv.innerHTML = `<p class="text-red-600">${response.data.error}</p>`;
         }
+    } catch (error) {
+        messageDiv.innerHTML = '<p class="text-red-600">Error uploading file.</p>';
+    }
 
-        const formData = new FormData();
-        formData.append('pdf', fileInput.files[0]);
-
-        try {
-            const response = await axios.post('/slide/upload', formData, {
-                headers: { 'Content-Type': 'multipart/form-data' }
-            });
-
-            if (response.status === 200) {
-                messageDiv.innerHTML = '<p class="text-green-600">File uploaded successfully.</p>';
-                loadFileList();
-            } else {
-                messageDiv.innerHTML = `<p class="text-red-600">${response.data.error}</p>`;
-            }
-        } catch (error) {
-            messageDiv.innerHTML = '<p class="text-red-600">Error uploading file.</p>';
-        }
-
-        fileInput.value = '';
-        fileNameDisplay.textContent = "Upload or drag & drop your PDF file.";
+    fileInput.value = '';
+    fileNameDisplay.textContent = "Upload or drag & drop your PDF file.";
     });
 
     async function loadFileList() {

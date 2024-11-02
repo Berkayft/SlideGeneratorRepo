@@ -10,7 +10,7 @@ const userSchema = new mongoose.Schema({
     },
     slides: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Slide'
+        ref: 'SlideModel'
     }],
     email: {
         type: String,

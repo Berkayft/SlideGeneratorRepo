@@ -6,6 +6,9 @@ const fs = require("fs");
 const { User , SlideModel } = require("../models/Model");
 const isAuthenticated = require("../middleware/authMiddleware");
 
+
+router.use(express.urlencoded({ extended: true }));
+router.use(express.json());
 // Diğer route'lar...
 router.get("/generation" , (req , res) => {
     res.render("uploadPdf");
@@ -18,11 +21,12 @@ router.post('/upload', isAuthenticated ,uploadPdf.single('pdf'), async (req, res
     if (!req.file) {
       return res.status(400).json({ error: 'Dosya yüklenemedi' });
     }
-    const title = req.body.name;
-    const description = req.body.description;
+    
+    const { name, description } = req.body;
+    console.log(name);
     const user = await User.findById(req.user._id);
     const slideModel = await SlideModel.create({
-      title: title,
+      title: name,
       description: description,
       user: user._id // yalnızca user ID eklenir
     });

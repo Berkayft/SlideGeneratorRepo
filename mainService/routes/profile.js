@@ -3,11 +3,15 @@ const router = express.Router();
 const { buyToken } = require("../middleware/moneyMiddleware");
 const isAuth = require("../middleware/authMiddleware");
 
-router.get("/", (req, res) => {
+const {User , SlideModel} = require("../models/Model"); 
+
+router.get("/", async (req, res) => {
     if (!req.isAuthenticated()) {
         return res.redirect("/login");
     }
-    res.render("profile", { user: req.user , navbar: "navbarauthed" });
+    const user = await User.findById(req.user._id).populate('slides').exec();
+    const userSlides = user ? user.slides : [];
+    res.render("profile", { user: req.user , navbar: "navbarauthed" , slides: userSlides });
 });
 // Token satın alma işlemi
 router.post("/buytoken", isAuth, buyToken, (req, res) => {
@@ -15,8 +19,5 @@ router.post("/buytoken", isAuth, buyToken, (req, res) => {
 });
 
 // Slide sayfası
-router.get("/myslides", isAuth, (req, res) => {
-    res.render("myslides");
-});
 
 module.exports = router;

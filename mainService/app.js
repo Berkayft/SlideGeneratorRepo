@@ -9,6 +9,8 @@ const flash = require('connect-flash'); // Flash kütüphanesini ekleyin
 const slideRoutes = require("./routes/slide");
 require("dotenv").config();
 
+const {User , SlideModel} = require("./models/Model"); 
+
 const indexRoutes = require("./routes/index");
 const chatRoutes = require("./routes/chat");
 const profileRoutes = require("./routes/profile");
@@ -47,11 +49,19 @@ app.get("/about", (req , res) => {
     res.render("about");
 });
 
-app.get("/slidehub" , (req , res) => {
+app.get("/slidehub" , async (req , res) => {
+    const slides = await SlideModel.find({ isPublic: true })
+            .sort({ viewedCount: -1 }) // viewedCount'a göre azalan sırada
+            .limit(30) // İlk 30 slayt
+            .populate('user') // Slaytların sahiplerini getir
+            .exec();
+
+        // Kullanıcı listesini oluştur
+        const user_list = slides.map(slide => slide.user);
     if(req.isAuthenticated()){
-        res.render("slidehub" , {navbar:"navbarauthed"});
+        res.render("slidehub" , {navbar:"navbarauthed" , slides:slides , userList: user_list});
     }else{
-        res.render("slidehub" , {navbar:"navbar"})
+        res.render("slidehub" , {navbar:"navbar" , slides:slides , userList: user_list});
     }
     
 })
@@ -68,9 +78,6 @@ app.get("/moreInfo" , (req , res) => {
     res.render("moreInfo");
 })
 
-app.get("/profile", isAuthenticated, (req , res) => {
-    res.render("profile");
-});
 
 
 
