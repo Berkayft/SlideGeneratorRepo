@@ -114,32 +114,32 @@
                 <!-- Slide Cards Section -->
                 <h1 class="text-4xl font-bold mt-10 mb-10">My Slides</h1>
                 <section class="text-gray-700 font-bold">
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <% users.forEach((user, index) => { %>
-            <div class="border-2 border-gray-200 bg-gray-100 font-bold border-opacity-60 rounded-lg overflow-hidden flex flex-col justify-between">
-                <img class="lg:h-48 md:h-36 w-full object-cover object-center" src="slaid_image/<%= index + 1 %>.jpeg" alt="Slide Image"/>
-                <div class="p-4 flex-grow">
-                    <h2 class="text-sm font-bold text-green-500 uppercase">Slide Title</h2>
-                    <h1 class="text-lg font-medium text-gray-800 mt-2"><%= user.slideTitle %></h1>
-                    <h2 class="text-sm font-bold text-green-500 uppercase mt-4">Description</h2>
-                    <p class="text-gray-800 mt-2 overflow-hidden" style="display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; min-height: 4.5em;">
-                        <%= user.slideDescription %>
-                    </p>
-                    <h2 class="text-sm font-bold text-green-500 uppercase mt-4">Value</h2>
-                    <p class="text-lg font-medium text-gray-800 mt-2"><%= user.value %></p>
-                </div>
-                <div class="p-4">
-                    <a href="/moreInfo" class="text-green-800 inline-flex items-center">More Info
-                        <svg class="w-4 h-4 ml-2" viewBox="0 0 24 24" stroke="currentColor" fill="none">
-                            <path d="M5 12h14"></path>
-                            <path d="M12 5l7 7-7 7"></path>
-                        </svg>
-                    </a>
-                </div>
-            </div>
-        <% }); %>
-    </div>
-</section>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <% slides.forEach((slide, index) => { %>
+                            <div class="border-2 border-gray-200 bg-gray-100 font-bold border-opacity-60 rounded-lg overflow-hidden flex flex-col justify-between">
+                                <img class="lg:h-48 md:h-36 w-full object-cover object-center" src="slaid_image/<%= index + 1 %>.jpeg" alt="Slide Image"/>
+                                <div class="p-4 flex-grow">
+                                    <h2 class="text-sm font-bold text-green-500 uppercase">Slide Title</h2>
+                                    <h1 class="text-lg font-medium text-gray-800 mt-2"><%= slide.title %></h1>
+                                    <h2 class="text-sm font-bold text-green-500 uppercase mt-4">Description</h2>
+                                    <p class="text-gray-800 mt-2 overflow-hidden" style="display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; min-height: 4.5em;">
+                                        <%= slide.description %>
+                                    </p>
+                                    <h2 class="text-sm font-bold text-green-500 uppercase mt-4">View Count</h2>
+                                    <p class="text-lg font-medium text-gray-800 mt-2"><%= slide.viewedCount %></p>
+                                </div>
+                                <div class="p-4">
+                                    <a href="/moreInfo" class="text-green-800 inline-flex items-center">More Info
+                                        <svg class="w-4 h-4 ml-2" viewBox="0 0 24 24" stroke="currentColor" fill="none">
+                                            <path d="M5 12h14"></path>
+                                            <path d="M12 5l7 7-7 7"></path>
+                                        </svg>
+                                    </a>
+                                </div>
+                            </div>
+                        <% }); %>
+                    </div>
+                </section>
 
                 
                 <script>

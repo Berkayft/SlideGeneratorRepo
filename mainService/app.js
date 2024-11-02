@@ -9,6 +9,7 @@ const flash = require('connect-flash'); // Flash kütüphanesini ekleyin
 const slideRoutes = require("./routes/slide");
 require("dotenv").config();
 
+
 const {User , SlideModel} = require("./models/Model"); 
 
 const indexRoutes = require("./routes/index");
@@ -50,7 +51,7 @@ app.get("/about", (req , res) => {
 });
 
 app.get("/slidehub" , async (req , res) => {
-    const slides = await SlideModel.find({ isPublic: true })
+    const slides = await SlideModel.find({ isPublic: false })
             .sort({ viewedCount: -1 }) // viewedCount'a göre azalan sırada
             .limit(30) // İlk 30 slayt
             .populate('user') // Slaytların sahiplerini getir
@@ -74,9 +75,24 @@ app.get("/faq" , (req , res) => {
     
 })
 
-app.get("/moreInfo" , (req , res) => {
-    res.render("moreInfo");
-})
+app.get("/moreInfo/:filepath", async (req, res) => {
+    const { filepath } = req.params; // Get the filepath from the request parameters
+
+    try {
+        // Find the slide in the database using the filepath
+        const slide = await SlideModel.findOne({ filepath: filepath }).exec();
+        
+        if (!slide) {
+            return res.status(404).send("Slide not found"); // Handle the case where the slide does not exist
+        }
+
+        // Render the moreInfo view with the slide data
+        res.render("moreInfo", { slide });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Server Error"); // Handle server errors
+    }
+});
 
 
 

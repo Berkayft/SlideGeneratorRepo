@@ -8,109 +8,83 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://unpkg.com/tailwindcss@2.2.4/dist/tailwind.min.css" rel="stylesheet">
     <style>
-        /* Hover animasyonu için CSS */
+        /* Hover animation for More Info button */
         .more-info {
             transition: color 0.3s ease;
         }
         .more-info:hover {
-            color: #4ade80; /* Açık yeşil rengi */
+            color: #4ade80; /* Light green color */
         }
+
         html, body {
             background-color: #e6e6e6;
         }
-        /* Arka planda görünür logo */
-        /*.background-logo {
-            position: fixed; 
-            top: 50%;
-            left: 50%;
-            width: 100%;
-            height: 100%;
-            background: url('fluctos-2.svg') no-repeat center center;
-            background-size: contain; 
-            opacity: 0.1; 
-            transform: translate(-50%, -50%);
-            z-index: -1; 
-        }*/
 
-        /* Açıklama sınırı ve ayarı */
+        /* Description styling */
         .description {
             display: -webkit-box;
-            -webkit-line-clamp: 2; /* İki satır göster */
+            -webkit-line-clamp: 2; /* Show two lines */
             -webkit-box-orient: vertical;
             overflow: hidden;
-            margin-bottom: 1rem; /* Açıklama ile değerin arasına boşluk ekle */
+            margin-bottom: 1rem; /* Spacing between description and value */
         }
 
-        /* Kartın esnek yapısını ayarlama */
+        /* Card structure adjustments */
         .card {
             display: flex;
             flex-direction: column;
-            justify-content: space-between; /* İçeriği yukarıda ve aşağıda yerleştir */
-            height: 100%; /* Kart yüksekliği */
+            justify-content: space-between; /* Space content evenly */
+            height: 100%; /* Card height */
         }
 
-        /* İçerik alanı için minimum yükseklik */
+        /* Content area minimum height */
         .content-area {
-            flex-grow: 1; /* Kartın içeriği esnek olarak büyüsün */
+            flex-grow: 1; /* Allow content to grow */
             display: flex;
             flex-direction: column;
-            justify-content: space-between; /* İçerik yukarıda ve aşağıda yerleştir */
+            justify-content: space-between; /* Space content evenly */
         }
     </style>
 </head>
-<body class=" relative">
+<body class="relative">
     <%- include(navbar); %>
-    <div class="background-logo mt-12"></div>
 
-    <% 
-    const users = [
-        { name: "Ensar Kulaç", value: 50, slideTitle: "Canlılar Ve Özellikleri", slideDescription: "Canlıların genel özellikleri anlatılır... Bu açıklama biraz uzadı. Buraya daha fazla metin ekleyerek açıklamanın uzunluğunu artırabiliriz." },
-        { name: "Berkay Fehmi Tekin", value: 20, slideTitle: "Hayvanlar Alemi", slideDescription: "Hayvanlar aleminin can alıcı noktalarına değinir." },
-        { name: "Mustafa Res", value: 12, slideTitle: "Su ve Yaşam", slideDescription: "Suyun yaşam için önemi anlatılır." },
-        { name: "Aslan aBİ", value: 13, slideTitle: "Eğitim ve Teknoloji", slideDescription: "Eğitim ve teknolojinin rolü açıklanır." }
-    ];
-    %>
-    <div class="container mx-auto px-4 flex">
-        <h1 class="text-4xl font-bold text-left mt-10 mb-10">Most Visited Slides</h1>
+    <div class="container mx-auto px-4 flex flex-col mt-12">
+        <h1 class="text-4xl font-bold text-left mt-10 mb-10">Most Viewed Slides</h1>
     </div>
 
-    <section class="text-gray-600 font-bold">
-        <div class="container px-5 py-5 mx-auto">
+    <!-- Slide Cards Section -->
+    <div class="container mx-auto px-4">
+        <section class="text-gray-700 font-bold">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <!-- Kart Bileşeni Başlangıcı -->
-                <% users.forEach((user, index) => { %>
-                <div class="border-2 border-gray-200 bg-gray-100 font-bold border-opacity-60 rounded-lg overflow-hidden card">
-                    <div class="w-full flex p-2 items-center">
-                        <div class="pl-2">
-                            <p class="font-bold text-lg mt-4 mb-4"><%= user.name %></p>
+                <% slides.forEach((slide) => { %>
+                    <div class="border-2 border-gray-200 bg-gray-100 font-bold border-opacity-60 rounded-lg overflow-hidden flex flex-col justify-between card">
+                        <img class="lg:h-48 md:h-36 w-full object-cover object-center" src="slaid_image/2.jpeg" alt="Slide Image"/>
+                        <div class="p-4 flex-grow content-area">
+                            <h2 class="text-sm font-bold text-green-500 uppercase">Slide Title</h2>
+                            <h1 class="text-lg font-medium text-gray-800 mt-2"><%= slide.title %></h1>
+                            <h2 class="text-sm font-bold text-green-500 uppercase mt-4">Description</h2>
+                            <p class="text-gray-800 mt-2 description"><%= slide.description %></p>
+                            <h2 class="text-sm font-bold text-green-500 uppercase mt-4">View Count</h2>
+                            <p class="text-lg font-medium text-gray-800 mt-2"><%= slide.viewedCount %></p>
                         </div>
-                    </div>
-                    <img class="lg:h-48 md:h-36 w-full object-cover object-center" src="slaid_image/<%= index + 1 %>.jpeg" alt="Slide Image"/>
-                    <div class="p-4 content-area"> <!-- İçerik alanı için yeni sınıf -->
+                        <div class="p-4">
+                            <a href="/moreInfo/<%= slide.filepath %>" class="text-gray-500 inline-flex items-center hover:text-gray-700">More Info
+                                <svg class="w-4 h-4 ml-2" viewBox="0 0 24 24" stroke="currentColor" fill="none">
+                                    <path d="M5 12h14"></path>
+                                    <path d="M12 5l7 7-7 7"></path>
+                                </svg>
+                            </a>
+                        </div>
                         
-                        <h2 class="text-xs font-bold text-green-400 mb-1 uppercase">Slayt Başlığı</h2>
-                        <h1 class="text-lg font-medium text-gray-900 mb-3"><%= user.slideTitle %></h1>
-                        
-                        <h2 class="text-xs font-bold text-green-400 mb-1 uppercase">Açıklama</h2>
-                        <p class="text-gray-700 mb-3 description"><%= user.slideDescription %></p>
-                        
-                        <h2 class="text-xs font-bold text-green-400 mb-1 uppercase">Değer</h2>
-                        <h1 class="text-lg font-medium text-gray-900 mb-3"><%= user.value %></h1>
                     </div>
-                    <div class="p-4"> <!-- More Info butonu için sabit alan -->
-                        <a href="/moreInfo" class="more-info text-green-800 inline-flex items-center">More Info
-                            <svg class="w-4 h-4 ml-2" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M5 12h14"></path>
-                                <path d="M12 5l7 7-7 7"></path>
-                            </svg>
-                        </a>
-                    </div>
-                </div>
                 <% }); %>
-                <!-- Kart Bileşeni Bitişi -->
             </div>
-        </div>
-    </section>
+        </section>
+    </div>
+    
+
+
     <%- include('footer') %>
 </body>
 </html>
