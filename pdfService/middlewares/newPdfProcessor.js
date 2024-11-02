@@ -25,8 +25,11 @@ const uploadPDFFile = async (fileManager, filePath) => {
 
 
 // LongText Schema
-const LongTextSchema = {
-    description: "A long text which created for teaching purpose",
-    type: SchemaType.STRING,
-    
+const longEducationalText = (model , filepath)  => {
+
+}
+
+
+const pdfProcessor = async (filepath) => {
+    {genAI , fileManager} = initializeGoogleAI()
 }
