@@ -59,7 +59,7 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <% slides.forEach((slide) => { %>
                     <div class="border-2 border-gray-200 bg-gray-100 font-bold border-opacity-60 rounded-lg overflow-hidden flex flex-col justify-between card">
-                        <img class="lg:h-48 md:h-36 w-full object-cover object-center" src="/slaytImages/<%=slide.imageUrl%>" alt="Slide Image"/>
+                        <img class="lg:h-48 md:h-36 w-full object-cover object-center" src="<%=slide.imageUrl%>" alt="Slide Image"/>
                         <div class="p-4 flex-grow content-area">
                             <h2 class="text-sm font-bold text-green-500 uppercase">Slide Title</h2>
                             <h1 class="text-lg font-medium text-gray-800 mt-2"><%= slide.title %></h1>

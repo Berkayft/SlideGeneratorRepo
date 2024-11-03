@@ -94,6 +94,7 @@ router.post("/startGeneration", async (req, res) => {
   creatingSlide.description = description;
   creatingSlide.theme = theme; // Store selected theme
   creatingSlide.status = "Evaluating";
+  creatingSlide.filepath = filepath;
   creatingSlide.imageUrl = await imagecreator(name, themelist[theme] , filepath);
   await creatingSlide.save();
 

@@ -42,7 +42,7 @@ async function createImage(title, backgroundColor, pdfname) {
         y += 40;
     }
 
-    const outputDir = path.resolve(__dirname, "../slaytImages"); // Using __dirname for absolute path
+    const outputDir = "slaytImages"; // Göreceli yol
     const imagePath = path.join(outputDir, outputFileName + ".png");
     
     try {
