@@ -41,7 +41,15 @@ const slideSchema = new mongoose.Schema({
         type: String,
         required: false, // Set to true if you want this field to be mandatory
         trim: true
-    }
+    },
+    status: {
+        type: String,
+        required: true,
+        default: "Creating"
+    },
+    pdfPathList: [{
+        type: String,
+    }]
 });
 
 const SlideModel = mongoose.model('SlideModel', slideSchema);

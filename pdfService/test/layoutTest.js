@@ -111,7 +111,7 @@ const mockPages = [
     {
     mainTitle: 'Deep Learning',
     subtitle:"Key Takeaways about NMT",
-    type:"list",
+    type:"bullet",
     textArray:[
     "Neural machine translation utilizes a single neural network to learn the translation process.",
     "NMT aims to build a more unified and holistic understanding of language structure compared to SMT.",

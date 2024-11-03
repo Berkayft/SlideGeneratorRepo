@@ -113,9 +113,6 @@ app.get("/changeStatus/:filepath" , isAuthenticated , async (req , res) => {
 })
 
 
-app.get("/uploadPdf", isAuthenticated, (req , res) => {
-    res.render("uploadPdf");
-});
 
 app.get('/health', (req, res) => {
     res.status(200).json({

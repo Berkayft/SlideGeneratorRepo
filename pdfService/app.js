@@ -4,7 +4,7 @@ const path = require('path');
 const fs = require('fs');
 
 const app = express();
-const mainMiddleWare = require("./middlewares/mainMiddleware");
+const mainMiddleWare = require("./middlewares/newMainMiddleware");
 
 require("dotenv").config();
 
@@ -12,6 +12,9 @@ require("dotenv").config();
 
 app.set('view engine', 'ejs');
 app.set("views" , "templates");
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 
 const uploadDir = path.join(__dirname, 'uploads/pdf/');
@@ -60,14 +63,26 @@ app.post('/upload-pdf' , upload.single('file'), async (req, res) => {
         res.status(200).send('File received successfully');
 
         console.log(file.filename);
-        await mainMiddleWare(file.filename);
-
     } catch (error) {
         console.error(error);
         res.status(500).send('Error processing the file');
     }
 });
 
+// body-parser middleware'ini ekleyin
+
+
+app.post("/startProcess", async (req, res) => {
+    try {
+        console.log(req.body.texts);
+        const pdfPathList = req.body.texts; // JSON.parse'a gerek yok
+        await mainMiddleWare(pdfPathList);
+        res.status(200).send({ message: "Process started successfully." });
+    } catch (error) {
+        console.log("Error in /startProcess:", error);
+        res.status(500).send({ error: "An error occurred while processing the request." });
+    }
+});
 
 app.get("/" , (req, res) => {
   res.render("deneme");

@@ -51,6 +51,7 @@ router.post('/upload-pptx', upload.single('file'), async (req, res) => {
         const slide_id = user.slides[user.slides.length-1];
         const theslide = await SlideModel.findById(slide_id);
         theslide.filepath = file.filename;
+        theslide.status = "Ready";
         await theslide.save();
 
         //DB işlemleri

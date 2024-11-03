@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide Generator</title>
+    <style>
+        body {
+            background-color: #f3f4f6;
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.7/axios.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+    <div class="bg-gray-100 min-h-screen flex flex-col">
+        <header class="bg-white h-16 px-10 flex items-center justify-between border-b-2 border-gray-200 shadow-sm">
+            <div class="flex items-center space-x-2 text-gray-400">
+                <a href="/" class="text-green-700 tracking-wider font-thin text-md">
+                    <img src="backSign.svg" alt="Back" class="w-12 h-12 object-cover rounded-full transition-transform duration-200 ease-in-out hover:scale-110 shadow-lg">
+                </a>
+                <h1 class="font-semibold text-gray-800 text-2xl">Slide Generator</h1>
+            </div>
+        </header>
+
+        <div class="flex flex-col lg:flex-row justify-center items-center mt-8 px-4 lg:px-0">
+            <div class="w-full lg:w-1/2 mx-auto">
+                <form id="uploadForm" class="bg-white shadow-lg rounded-lg p-8">
+                    <div class="flex flex-wrap -mx-3 mb-6">
+                        <div class="w-full px-3 mb-6">
+                            <label for="slide_name" class="block text-gray-700 text-sm font-bold mb-2 uppercase tracking-wide">Slide Name</label>
+                            <input type="text" name="name" placeholder="Name" class="w-full bg-gray-50 border border-gray-300 rounded-lg py-3 px-4 text-gray-900 focus:outline-none focus:border-green-400" required>
+                        </div>
+
+                        <div class="w-full px-3 mb-6">
+                            <label for="slide_description" class="block text-gray-700 text-sm font-bold mb-2 uppercase tracking-wide">Slide Description</label>
+                            <textarea name="description" rows="4" placeholder="Description..." class="w-full bg-gray-50 border border-gray-300 rounded-lg py-3 px-4 text-gray-900 focus:outline-none focus:border-green-400" required></textarea>
+                        </div>
+
+                        <div class="w-full px-3 mb-6">
+                            <label class="block text-gray-700 text-sm font-bold mb-2 uppercase tracking-wide">Theme Selection</label>
+                            <div class="flex justify-between items-center space-x-4">
+                                <div class="flex flex-col items-center mt-4">
+                                    <img src="d7d7d7.svg" alt="Slide 1" class="w-42 h-42 rounded-lg shadow-md mb-2">
+                                    <input type="radio" id="theme1" name="theme" value="0" class="text-green-600 focus:ring-green-400" required>
+                                    <label for="theme1" class="text-gray-600 text-sm">Theme 1</label>
+                                </div>
+                                <div class="flex flex-col items-center mt-4">
+                                    <img src="thema1.svg" alt="Slide 2" class="w-42 h-42 rounded-lg shadow-md mb-2">
+                                    <input type="radio" id="theme2" name="theme" value="1" class="text-green-600 focus:ring-green-400">
+                                    <label for="theme2" class="text-gray-600 text-sm">Theme 2</label>
+                                </div>
+                                <div class="flex flex-col items-center mt-4">
+                                    <img src="thema2.svg" alt="Slide 3" class="w-42 h-42 rounded-lg shadow-md mb-2">
+                                    <input type="radio" id="theme3" name="theme" value="2" class="text-green-600 focus:ring-green-400">
+                                    <label for="theme3" class="text-gray-600 text-sm">Theme 3</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="w-full px-3 mb-6">
+                            <label class="block text-gray-700 text-sm font-bold mb-2 uppercase tracking-wide">PDF Files</label>
+                            <button type="button" id="addPdfButton" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 mb-4">+ Add PDF</button>
+                            
+                            <div id="pdfList" class="space-y-2"></div>
+                            <input id="pdfFiles" type="file" class="hidden" accept=".pdf" />
+                        </div>
+
+                        <div class="w-full px-3">
+                            <button type="submit" class="w-full bg-green-600 text-white font-bold rounded-lg py-3 transition duration-300 hover:bg-green-700 focus:outline-none focus:ring-4 focus:ring-green-400">Generate</button>
+                        </div>
+
+                        <div id="message" class="w-full text-center mt-4"></div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const fileInput = document.getElementById('pdfFiles');
+        const pdfList = document.getElementById('pdfList');
+        const addPdfButton = document.getElementById('addPdfButton');
+        const messageDiv = document.getElementById('message');
+        let selectedFiles = [];
+
+        addPdfButton.addEventListener('click', () => {
+            fileInput.click();
+        });
+
+        fileInput.addEventListener('change', () => {
+            if (fileInput.files.length > 0) {
+                const file = fileInput.files[0];
+                selectedFiles.push({
+                    file: file,
+                    uploaded: false,
+                    uploading: false
+                });
+                renderFileList();
+                fileInput.value = '';
+            }
+        });
+
+        async function uploadFile(fileData, index) {
+            const formData = new FormData();
+            formData.append('pdf', fileData.file);
+
+            try {
+                fileData.uploading = true;
+                renderFileList();
+                
+                const response = await axios.post('/slide/upload', formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                });
+                
+                if (response.status === 200) {
+                    fileData.uploaded = true;
+                    fileData.uploading = false;
+                    renderFileList();
+                }
+            } catch (error) {
+                console.error('Upload error:', error);
+                messageDiv.textContent = error.response?.data?.error || 'Error uploading file';
+                fileData.uploading = false;
+                renderFileList();
+            }
+        }
+
+        function renderFileList() {
+            pdfList.innerHTML = '';
+            selectedFiles.forEach((fileData, index) => {
+                const fileDiv = document.createElement('div');
+                fileDiv.className = "flex items-center justify-between bg-gray-100 p-3 rounded-lg shadow-md";
+
+                const fileName = document.createElement('span');
+                fileName.textContent = fileData.file.name;
+                fileName.className = "text-gray-800";
+
+                const buttonContainer = document.createElement('div');
+                buttonContainer.className = "flex gap-2";
+
+                if (!fileData.uploaded && !fileData.uploading) {
+                    const uploadButton = document.createElement('button');
+                    uploadButton.textContent = "Upload";
+                    uploadButton.className = "bg-blue-500 text-white px-2 py-1 rounded-lg hover:bg-blue-600";
+                    uploadButton.onclick = () => uploadFile(fileData, index);
+                    buttonContainer.appendChild(uploadButton);
+                } else if (fileData.uploading) {
+                    const status = document.createElement('span');
+                    status.textContent = "Uploading...";
+                    status.className = "text-blue-500";
+                    buttonContainer.appendChild(status);
+                } else if (fileData.uploaded) {
+                    const status = document.createElement('span');
+                    status.textContent = "✓ Uploaded";
+                    status.className = "text-green-500";
+                    buttonContainer.appendChild(status);
+                }
+
+                const removeButton = document.createElement('button');
+                removeButton.textContent = "Remove";
+                removeButton.className = "bg-red-500 text-white px-2 py-1 rounded-lg hover:bg-red-600";
+                removeButton.onclick = () => {
+                    selectedFiles.splice(index, 1);
+                    renderFileList();
+                };
+                buttonContainer.appendChild(removeButton);
+
+                fileDiv.appendChild(fileName);
+                fileDiv.appendChild(buttonContainer);
+                pdfList.appendChild(fileDiv);
+            });
+        }
+
+        document.getElementById('uploadForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            messageDiv.textContent = '';
+
+            // Check if all files are uploaded
+            const unuploadedFiles = selectedFiles.filter(f => !f.uploaded);
+            if (unuploadedFiles.length > 0) {
+                messageDiv.textContent = 'Please upload all PDF files before generating.';
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('name', e.target.name.value);
+            formData.append('description', e.target.description.value);
+            formData.append('theme', e.target.theme.value);
+
+            try {
+                const response = await axios.post('/slide/startGeneration', formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                    }
+                });
+                
+                // Redirect to profile page as per backend implementation
+                window.location.href = '/profile';
+            } catch (error) {
+                console.error('Error:', error);
+                messageDiv.textContent = error.response?.data?.error || 'An error occurred during slide generation.';
+            }
+        });
+    </script>
+</body>
+</html>
