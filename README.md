@@ -29,3 +29,4 @@ Fluctos, kullanıcıların kaynaklarını kullanarak etkileyici ve bilgilendiric
 **Yazarlar:**
 - Berkay Fehmi Tekin
 - Mustafa Ensar Kulaç
+![Resim Açıklaması](./Kanvas İşletme Modeli.jpg)
