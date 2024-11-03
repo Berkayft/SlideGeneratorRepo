@@ -11,6 +11,10 @@ Ayrıca, proje kapsamında **Gemini’nin Büyük Dil Modelleri (LLM)** teknoloj
 Platformun en önemli bileşenlerinden biri olan **Slide Hub** ile evrensel eğitimi destekleyen güçlü bir yapı sunuyoruz. Eğitimde eşitlik sağlayarak, herkesin bilgiye kolayca erişebilmesini ve kaliteli eğitim içeriğine ulaşabilmesini hedefliyoruz. Slide Hub, geniş kapsamlı bir kaynak projesine dönüştürerek bilgiye erişim olanaklarını artırıyor ve eğitimi daha kapsayıcı bir hale getiriyor.
 
 ## Kurulum
+-Her iki folder için ayrı ayrı:
+npm install
+-Sonrasında her iki klasörde eş zamanlı olarak:
+node app.js
 
 ## Kullanım Kılavuzu
 
