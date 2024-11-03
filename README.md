@@ -6,7 +6,7 @@ Fluctos, kullanıcıların kaynaklarını kullanarak etkileyici ve bilgilendiric
 
 ## Kurulum
 
-### Kullanım Kılavuzu
+## Kullanım Kılavuzu
 
 1. **Üyelik Oluşturma**: Platformumuzdan yararlanabilmek için öncelikle üye olmanız gerekmektedir. Üye olmadan, en çok ziyaret edilen slaytları görüntüleyebilirsiniz; ancak, slaytları indirmek ve daha ayrıntılı bilgi almak için üye olmanız şarttır.
    
