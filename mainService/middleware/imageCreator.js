@@ -1,69 +1,60 @@
-const { createCanvas } = require('canvas'); // Canvas kütüphanesini yükle
-const fs = require('fs').promises; // Asenkron dosya sistemi modülünü yükle
-const path = require('path'); // Yol işlemleri için path modülünü yükle
+const { createCanvas } = require('canvas');
+const fs = require('fs').promises;
+const path = require('path');
 
-async function createImage(title, backgroundColor , pdfname) {
-
+async function createImage(title, backgroundColor, pdfname) {
     const outputFileName = path.parse(pdfname).name;
-    const width = 800; // Genişlik
-    const height = 400; // Yükseklik
-    const canvas = createCanvas(width, height); // Canvas oluştur
-    const ctx = canvas.getContext('2d'); // 2D bağlamını al
+    const width = 800;
+    const height = 400;
+    const canvas = createCanvas(width, height);
+    const ctx = canvas.getContext('2d');
 
-    // Arka plan rengi
+    // Background color
     ctx.fillStyle = backgroundColor;
     ctx.fillRect(0, 0, width, height);
 
-    // Metin ayarları
-    ctx.fillStyle = "#000"; // Metin rengi
+    // Text settings
+    ctx.fillStyle = "#000";
     ctx.font = "40px Arial";
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
 
-    const lines = []; // Satırları tutmak için bir dizi oluştur
-    const words = (title || '').split(' '); // Başlık kelimelerine ayır
-    let currentLine = ''; // Mevcut satırı tut
+    const lines = [];
+    const words = (title || '').split(' ');
+    let currentLine = '';
 
-    // Kelimeleri kontrol et ve satırlara ayır
     for (let word of words) {
-        const testLine = currentLine + word + ' '; // Yeni kelime ile dene
-        const metrics = ctx.measureText(testLine); // Metin genişliğini ölç
-        const lineHeight = 40; // Satır yüksekliği (metin boyutuyla aynı)
-
-        // Eğer mevcut satır genişliği, canvas genişliğinden fazlaysa yeni satıra geç
+        const testLine = currentLine + word + ' ';
+        const metrics = ctx.measureText(testLine);
         if (metrics.width > width && currentLine) {
-            lines.push(currentLine); // Mevcut satırı kaydet
-            currentLine = word + ' '; // Yeni satıra başla
+            lines.push(currentLine);
+            currentLine = word + ' ';
         } else {
-            currentLine = testLine; // Mevcut satıra kelimeyi ekle
+            currentLine = testLine;
         }
     }
-
-    // Son satırı da ekle
     lines.push(currentLine);
 
-    // Satırları çizerken ortala
-    const totalHeight = lines.length * 40; // Toplam yükseklik
-    let y = (height - totalHeight) / 2; // Y başlangıç noktası
-
-    // Tüm satırları çiz
+    const totalHeight = lines.length * 40;
+    let y = (height - totalHeight) / 2;
     for (let line of lines) {
-        ctx.fillText(line.trim(), width / 2, y); // Her satırı ortala
-        y += 40; // Y koordinatını bir satır yüksekliği kadar artır
+        ctx.fillText(line.trim(), width / 2, y);
+        y += 40;
     }
 
-    // Resmi kaydet
-     // Çıktı dosyası
-    const outputDir = path.join("/static/", 'slaid_Image'); // Çıktı dizini
-    const imagePath = path.join(outputDir, outputFileName+".png"); // Tam yol oluştur
+    const outputDir = path.resolve(__dirname, "../slaytImages"); // Using __dirname for absolute path
+    const imagePath = path.join(outputDir, outputFileName + ".png");
     
-    // Çıktı dizinini oluştur
-    await fs.mkdir(outputDir, { recursive: true }); // Klasör yoksa oluştur
+    try {
+        await fs.mkdir(outputDir, { recursive: true });
+        const buffer = canvas.toBuffer('image/png');
+        await fs.writeFile(imagePath, buffer);
+        console.log('Resim oluşturuldu:', imagePath);
+    } catch (error) {
+        console.error('Error creating image:', error);
+    }
 
-    const buffer = canvas.toBuffer('image/png'); // PNG formatında tampon oluştur
-    await fs.writeFile(imagePath, buffer); // Asenkron olarak resmi dosyaya kaydet
-    console.log('Resim oluşturuldu:', imagePath);
-    return imagePath; // Dosya yolunu döndür
+    return imagePath;
 }
 
 module.exports = createImage;
