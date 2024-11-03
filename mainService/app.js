@@ -53,6 +53,9 @@ app.get("/about", (req , res) => {
         res.render("about" , {navbar:"navbar"})
     }
 });
+app.use('/slide/static', express.static(path.join(__dirname, 'static')));
+app.use('/moreInfo/static', express.static(path.join(__dirname, 'static')));
+
 
 app.get("/slidehub" , async (req , res) => {
     const slides = await SlideModel.find({ isPublic: false })

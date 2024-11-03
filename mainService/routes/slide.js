@@ -8,7 +8,7 @@ const isAuthenticated = require("../middleware/authMiddleware");
 const { spendToken } = require("../middleware/moneyMiddleware");
 const path = require("path");
 const { Slide } = require("nodejs-pptx");
-
+const imagecreator = require("../middleware/imageCreator");
 
 router.use(express.urlencoded({ extended: true }));
 router.use(express.json());
@@ -75,7 +75,6 @@ router.post('/upload', uploadPdf.single('pdf'), async (req, res) => {
 
 router.post("/startGeneration", async (req, res) => {
   const { name, description, theme } = req.body;
-  
   const creatingSlide = await SlideModel.findOne({
     user: req.user._id,
     status: "Creating"
@@ -89,6 +88,7 @@ router.post("/startGeneration", async (req, res) => {
   creatingSlide.description = description;
   creatingSlide.theme = theme; // Store selected theme
   creatingSlide.status = "Evaluating";
+  creatingSlide.imageUrl = await imagecreator(name, "f0f0f0");
   await creatingSlide.save();
 
   const pdfPaths = creatingSlide.pdfPathList;
