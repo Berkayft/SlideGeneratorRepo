@@ -22,6 +22,9 @@ Fluctos, kullanıcıların kaynaklarını kullanarak etkileyici ve bilgilendiric
    
 7. **Sıkça Sorulan Sorular**: Footer bölümündeki "FAQ" butonuna tıklayarak sıkça sorulan sorulara ulaşabilirsiniz.
 
+## İş Modeli Kanvas
+![Kanvas İşletme Modeli](https://github.com/user-attachments/assets/dbc8cfa0-9162-4513-a0c5-46e3865b253d)
+
 ## İletişim
 
 İletişim bilgilerine "About Us" kısmından ayrıntılı bir şekilde ulaşabilirsiniz.
@@ -29,6 +32,6 @@ Fluctos, kullanıcıların kaynaklarını kullanarak etkileyici ve bilgilendiric
 **Yazarlar:**
 - Berkay Fehmi Tekin
 - Mustafa Ensar Kulaç
-![Kanvas İşletme Modeli](https://github.com/user-attachments/assets/dbc8cfa0-9162-4513-a0c5-46e3865b253d)
+
 
 
