@@ -185,15 +185,17 @@
                 return;
             }
 
-            const formData = new FormData();
-            formData.append('name', e.target.name.value);
-            formData.append('description', e.target.description.value);
-            formData.append('theme', e.target.theme.value);
+            // Instead of FormData, create a regular object
+            const data = {
+                name: e.target.name.value,
+                description: e.target.description.value,
+                theme: e.target.theme.value
+            };
 
             try {
-                const response = await axios.post('/slide/startGeneration', formData, {
+                const response = await axios.post('/slide/startGeneration', data, {
                     headers: {
-                        'Content-Type': 'multipart/form-data',
+                        'Content-Type': 'application/json',
                     }
                 });
                 

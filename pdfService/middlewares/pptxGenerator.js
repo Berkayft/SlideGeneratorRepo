@@ -11,6 +11,36 @@ const createSlide = async (theme, layouts, generalPages, filename) => {
   const pptx = new pptxGenJs();
   const filepath = "uploads/pptx/" + filename + ".pptx";
 
+  const welcomeSlide = pptx.addSlide();
+  
+  // Welcome slide başlığı
+  welcomeSlide.addText("Welcome", {
+    x: 1,
+    y: 2,
+    w: 8,
+    h: 1.5,
+    fontSize: 44,
+    fontFace: theme.fonts[0],
+    color: theme.fontcolors[0],
+    align: "center",
+    bold: true
+  });
+
+  // Author alanı
+  welcomeSlide.addText("Author:", {
+    x: 1,
+    y: 3.5,
+    w: 8,
+    h: 0.5,
+    fontSize: 24,
+    fontFace: theme.fonts[0],
+    color: theme.fontcolors[1],
+    align: "center"
+  });
+
+  // Welcome slide arka planı
+  welcomeSlide.background = { color: theme.backgrounds[2] };
+
   for(let i = 0; i < generalPages.length; i++) {
     const pageData = generalPages[i][0]; // { pageContents: [...] }
     const title = generalPages[i][1];    // başlık string'i
@@ -50,7 +80,7 @@ const createSlide = async (theme, layouts, generalPages, filename) => {
           fontFace: theme.fonts[0],
           color: theme.fontcolors[1],
           align: "center",
-          x: 6.8,
+          x: 6.2,
           y: 4.8,
           w: 4,
           h: 0.5,
@@ -147,10 +177,26 @@ const createSlide = async (theme, layouts, generalPages, filename) => {
       }
     });
   }
+  const lastPage = pptx.addSlide();
+  
+  // Welcome slide başlığı
+  lastPage.addText("Thanks for Listening", {
+    x: 1,
+    y: 2,
+    w: 8,
+    h: 1.5,
+    fontSize: 44,
+    fontFace: theme.fonts[0],
+    color: theme.fontcolors[0],
+    align: "center",
+    bold: true
+  });
+
+  lastPage.background = { color: theme.backgrounds[2] };
 
   await pptx.writeFile({ fileName: filepath });
   console.log("finished");
   return filepath;
-}
+} 
 
 module.exports = createSlide;

@@ -25,7 +25,7 @@ app = express();
 app.set('view engine', 'ejs');
 app.set("views", "templates");
 
-app.use(express.static('static'))
+app.use(express.static('static'));
 
 app.use(express.json()); // JSON verilerini parse eder
 app.use(express.urlencoded({ extended: true }));
@@ -58,7 +58,7 @@ app.use('/moreInfo/static', express.static(path.join(__dirname, 'static')));
 
 
 app.get("/slidehub" , async (req , res) => {
-    const slides = await SlideModel.find({ isPublic: false })
+    const slides = await SlideModel.find({ isPublic: true })
             .sort({ viewedCount: -1 }) // viewedCount'a göre azalan sırada
             .limit(30) // İlk 30 slayt
             .populate('user') // Slaytların sahiplerini getir
@@ -96,7 +96,11 @@ app.get("/moreInfo/:filepath", isAuthenticated, async (req, res) => {
 
         // Find the user associated with the slide
         const user = await User.findById(slide.user);
-
+        if(user._id.toString() !== slide.user.toString()){
+            slide.viewedCount += 1;
+            await slide.save();
+        }
+        
         // Render the moreInfo view with the slide data
         res.render("moreInfo", { slide: slide, user: user });
     } catch (error) {
@@ -107,13 +111,13 @@ app.get("/moreInfo/:filepath", isAuthenticated, async (req, res) => {
 
 app.get("/changeStatus/:filepath" , isAuthenticated , async (req , res) => {
     const { filepath } = req.params;
-    const slide = await SlideModel.findOne({ filepath: filepath }).exec();
+    const slide = await SlideModel.findById(filepath);
     if(slide.isPublic == false) {
         slide.isPublic = true;
     }else {
         slide.isPublic = false;
     }
-    console.log(slide.isPublic);
+
     await slide.save();
     
     res.redirect("/profile");

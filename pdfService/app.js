@@ -76,8 +76,12 @@ app.post("/startProcess", async (req, res) => {
     try {
         console.log(req.body.texts);
         const outputFileName = path.parse(req.body.texts[0]).name;
-        const pdfPathList = req.body.texts.map(element => "uploads/pdf/" + element);
-        await mainMiddleWare(pdfPathList,outputFileName);
+        const texts = req.body.texts;
+        const themecode = texts.pop();
+        console.log(themecode);
+        console.log(texts);
+        const pdfPathList = texts.map(element => "uploads/pdf/" + element);
+        await mainMiddleWare(pdfPathList,outputFileName,themecode);
         res.status(200).send({ message: "Process started successfully." });
     } catch (error) {
         console.log("Error in /startProcess:", error);

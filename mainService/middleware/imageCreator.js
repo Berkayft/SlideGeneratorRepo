@@ -2,7 +2,9 @@ const { createCanvas } = require('canvas'); // Canvas kütüphanesini yükle
 const fs = require('fs').promises; // Asenkron dosya sistemi modülünü yükle
 const path = require('path'); // Yol işlemleri için path modülünü yükle
 
-async function createImage(title, backgroundColor) {
+async function createImage(title, backgroundColor , pdfname) {
+
+    const outputFileName = path.parse(pdfname).name;
     const width = 800; // Genişlik
     const height = 400; // Yükseklik
     const canvas = createCanvas(width, height); // Canvas oluştur
@@ -51,9 +53,9 @@ async function createImage(title, backgroundColor) {
     }
 
     // Resmi kaydet
-    const imageName = 'slideImage.png'; // Çıktı dosyası
-    const outputDir = path.join(__dirname, 'slaid_Image'); // Çıktı dizini
-    const imagePath = path.join(outputDir, imageName); // Tam yol oluştur
+     // Çıktı dosyası
+    const outputDir = path.join("/static/", 'slaid_Image'); // Çıktı dizini
+    const imagePath = path.join(outputDir, outputFileName+".png"); // Tam yol oluştur
     
     // Çıktı dizinini oluştur
     await fs.mkdir(outputDir, { recursive: true }); // Klasör yoksa oluştur

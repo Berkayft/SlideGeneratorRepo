@@ -9,15 +9,20 @@ const { spendToken } = require("../middleware/moneyMiddleware");
 const path = require("path");
 const { Slide } = require("nodejs-pptx");
 const imagecreator = require("../middleware/imageCreator");
+const themelist = require("../manual/themes");
 
 router.use(express.urlencoded({ extended: true }));
 router.use(express.json());
 // Diğer route'lar...
 
 router.get("/slideGenerationPage", async (req, res) => {
+
+  
   try {
     const user = await User.findById(req.user._id);
-    
+    if(user.tokenCount < 1){
+      return res.status(403).send("Yeterli token yok. Lütfen token satın alın.");
+    }
     // Check for an existing slide with status "Creating"
     const creatingSlide = await SlideModel.findOne({
       user: req.user._id,
@@ -75,6 +80,7 @@ router.post('/upload', uploadPdf.single('pdf'), async (req, res) => {
 
 router.post("/startGeneration", async (req, res) => {
   const { name, description, theme } = req.body;
+  console.log(name);
   const creatingSlide = await SlideModel.findOne({
     user: req.user._id,
     status: "Creating"
@@ -83,26 +89,38 @@ router.post("/startGeneration", async (req, res) => {
   if (!creatingSlide) {
     return res.status(404).json({ error: 'Slide not found or not in creating status' });
   }
-
+  const filepath = creatingSlide.pdfPathList[0].replace(".pdf","");
   creatingSlide.title = name;
   creatingSlide.description = description;
   creatingSlide.theme = theme; // Store selected theme
   creatingSlide.status = "Evaluating";
-  creatingSlide.imageUrl = await imagecreator(name, "f0f0f0");
+  creatingSlide.imageUrl = await imagecreator(name, themelist[theme] , filepath);
   await creatingSlide.save();
 
   const pdfPaths = creatingSlide.pdfPathList;
   console.log(pdfPaths);
+  const user = await User.findById(req.user._id);
+  user.tokenCount -= 1;
+  await user.save();
   await sendMultiplePDF(pdfPaths);
+  pdfPaths.push(theme);
   await startProcess(pdfPaths);
   res.redirect("/profile");
 });
 
-router.get('/download/:filename', (req, res) => {
-    const filename = req.params.filename;
-    const filePath = path.join('uploads',"pptx", filename);
+router.get('/download/:filename', async (req, res) => {
+    const filename = req.params.filename.replace(".pptx","");
+    const filePath = path.join('uploads',"pptx", filename+".pptx");
     console.log(filePath);
     // Dosyanın varlığını kontrol et
+
+    const slide = await SlideModel.findOne({ filepath: filename }).exec();
+    const user = await User.findById(req.user._id);
+    if(user._id.toString() !== slide.user.toString()){
+      slide.downloadCount += 1;
+      await slide.save();
+    }
+
     if (!fs.existsSync(filePath)) {
       return res.status(404).json({ error: 'Dosya bulunamadı' });
     }

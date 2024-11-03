@@ -73,7 +73,7 @@
                             <p class="text-red-500">Private</p> <!-- Changed color for clarity -->
                         <% } %>
                         
-                        <% if (slide.user.equals(user)) { %> <!-- Use .equals() for ObjectId comparison -->
+                        <% if (slide.user._id.equals(user._id))  { %> <!-- Use .equals() for ObjectId comparison -->
                             <button onclick="window.location.href='/changeStatus/<%= slide._id %>'" class="flex bg-green-500 text-white px-6 py-2 rounded-md hover:bg-green-600">
                                 Change Status
                             </button>
@@ -99,8 +99,8 @@
                                 </svg>
                                 <span><%= slide.filePath %></span>
                             </div>
-                            <% if (slide.status === 'ready') { %>
-                                <a href="/slide/download/<%= slide.filePath %>" class="text-green-700 hover:underline">Download</a>
+                            <% if (slide.status === "Ready") { %>
+                                <a href="/slide/download/<%= slide.filepath %>.pptx" class="text-green-700 hover:underline">Download</a>
                             <% } else { %>
                                 <span class="text-yellow-600"><%= slide.status %>...</span>
                             <% } %>
