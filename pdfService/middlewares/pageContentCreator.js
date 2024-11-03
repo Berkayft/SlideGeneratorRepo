@@ -147,16 +147,13 @@ async function processPDFs(pdfPaths, sections) {
 
         for (const section of sections) {
             const { title, subtitles } = section;
-
             for (const subtitle of subtitles) {
                 const prompt = `Analyze the provided PDFs related to the title '${title}' and subtitle '${subtitle.nameOfSubtitle}' with the description: '${subtitle.descriptionofSubtitle}'. For this subtitle, create content that best summarizes key information, structured in one of three formats: Paragraphs, Comparison, or Bulleted List.
                 
                 Paragraphs: Write a single paragraph no more than 200 words that conveys the main ideas.
                 Comparison: Provide two brief texts of up to 4 lines each, highlighting distinct comparisons between concepts or elements.
                 Bulleted List: Provide a list of 5 points, each limited to 40 words, summarizing the essential details or takeaways.
-                Choose the format that best organizes the information for clarity on a single slide. Assign a heading to this slide that captures the main idea in one concise phrase.
-                
-                IMPORTANT: Ensure your response is in valid JSON format matching the specified schema.`;
+                Choose the format that best organizes the information for clarity on a single slide. Assign a heading to this slide that captures the main idea in one concise phrase.`;
 
                 const chat = model.startChat();
                 
@@ -170,10 +167,37 @@ async function processPDFs(pdfPaths, sections) {
                     { text: prompt }
                 ]);
 
-                // Parse the response carefully
-                const responseText = result.response.text();
-                const parsedResponse = parseJSON(responseText);
-                results.push(parsedResponse);
+                let response;
+                try {
+                    // İlk olarak doğrudan responseData'yı almayı dene
+                    response = result.response.responseData;
+                    
+                    // Eğer responseData yoksa veya geçerli değilse, text'i parse et
+                    if (!response?.pageContents) {
+                        const responseText = result.response.text();
+                        // responseText bir string mi yoksa obje mi kontrol et
+                        response = typeof responseText === 'string' ? 
+                            JSON.parse(responseText) : responseText;
+                    }
+
+                    // Şemaya uygunluğu kontrol et
+                    if (!response?.pageContents?.length) {
+                        throw new Error('Invalid response format');
+                    }
+                } catch (error) {
+                    console.warn(`Error processing response: ${error.message}`);
+                    // Hata durumunda varsayılan bir yanıt oluştur
+                    response = {
+                        pageContents: [{
+                            TextType: "Paragraphs",
+                            Texts: ["Error processing content. Please try again."],
+                            HeadingOfPage: "Error Processing Content"
+                        }]
+                    };
+                }
+
+                results.push([response, title]);
+                console.log("Processed section:", title);
             }
         }
 
@@ -184,7 +208,6 @@ async function processPDFs(pdfPaths, sections) {
         throw error;
     }
 }
-
 async function main(pdfPathList, inputData) {
     try {
         const sections = inputData.section;

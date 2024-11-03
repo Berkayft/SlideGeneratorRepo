@@ -75,8 +75,9 @@ app.post('/upload-pdf' , upload.single('file'), async (req, res) => {
 app.post("/startProcess", async (req, res) => {
     try {
         console.log(req.body.texts);
-        const pdfPathList = req.body.texts; // JSON.parse'a gerek yok
-        await mainMiddleWare(pdfPathList);
+        const outputFileName = path.parse(req.body.texts[0]).name;
+        const pdfPathList = req.body.texts.map(element => "uploads/pdf/" + element);
+        await mainMiddleWare(pdfPathList,outputFileName);
         res.status(200).send({ message: "Process started successfully." });
     } catch (error) {
         console.log("Error in /startProcess:", error);

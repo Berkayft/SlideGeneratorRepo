@@ -75,6 +75,7 @@ router.post('/upload', uploadPdf.single('pdf'), async (req, res) => {
 
 router.post("/startGeneration", async (req, res) => {
   const { name, description, theme } = req.body;
+  
   const creatingSlide = await SlideModel.findOne({
     user: req.user._id,
     status: "Creating"

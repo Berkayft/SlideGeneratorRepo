@@ -50,7 +50,7 @@ const startProcess = async (pdfPaths) => {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${process.env.PDFPROCESSKEY}`
                 },
-                timeout: 180000
+                timeout: 1440000
             }
         );
 

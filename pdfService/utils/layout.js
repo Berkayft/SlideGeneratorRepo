@@ -1,15 +1,15 @@
 class Layout {
-    constructor(nameOrObject, contentAreas = [],type ="", description = '') {
+    constructor(nameOrObject, contentAreas = [],type ="", title = "") {
         if (typeof nameOrObject === 'object') {
             this.name = nameOrObject.name;
             this.contentAreas = nameOrObject.contentAreas || [];
-            this.description = nameOrObject.description;
             this.type = nameOrObject.type;
+            this.title = nameOrObject.title;
         } else {
             this.name = nameOrObject;
             this.contentAreas = contentAreas;
-            this.description = description;
             this.type = type;
+            this.title = title;
         }
     }
 
@@ -19,8 +19,8 @@ class Layout {
             contentAreas: this.contentAreas.map(area => 
                 typeof area.getJsonObject === 'function' ? area.getJsonObject() : area
             ),
-            description: this.description,
-            type:this.type
+            type:this.type,
+            title:this.title
         };
     }
 }

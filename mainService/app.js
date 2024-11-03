@@ -47,7 +47,11 @@ app.use("/" , authRoutes);
 app.use("/",pptxRoutes);
 
 app.get("/about", (req , res) => {
-    res.render("about");
+    if(req.isAuthenticated()){
+        res.render("about" , {navbar:"navbarauthed"});
+    }else{
+        res.render("about" , {navbar:"navbar"})
+    }
 });
 
 app.get("/slidehub" , async (req , res) => {

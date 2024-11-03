@@ -5,7 +5,9 @@ const fs = require('fs');
 
 
 const pptxSend = async (filepath) => {
+    console.log(filepath);
     try{
+        
         const form = new FormData();
 
         form.append("file",fs.createReadStream(filepath));
@@ -15,7 +17,7 @@ const pptxSend = async (filepath) => {
                 ...form.getHeaders(),
                 'Authorization': `Bearer ${process.env.MAINPROCESSKEY}`
             },
-            timeout: 180000
+            timeout: 720000
         });
     }
     catch (error){
