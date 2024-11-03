@@ -29,5 +29,6 @@ Fluctos, kullanıcıların kaynaklarını kullanarak etkileyici ve bilgilendiric
 **Yazarlar:**
 - Berkay Fehmi Tekin
 - Mustafa Ensar Kulaç
-![Kanvas İşletme Modeli](./Kanvas%20İşletme%20Modeli.jpg)
+![Kanvas İşletme Modeli](https://github.com/user-attachments/assets/dbc8cfa0-9162-4513-a0c5-46e3865b253d)
+
 
