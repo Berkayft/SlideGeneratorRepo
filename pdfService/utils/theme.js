@@ -10,7 +10,8 @@ class Theme{
         return {
             name: this.name,
             fonts: this.fonts,
-            backgrounds: this.backgrounds
+            backgrounds: this.backgrounds,
+            fontcolors:this.fontcolors
         };
     }
 

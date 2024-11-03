@@ -24,7 +24,7 @@
         </header>
         
         <div class="flex flex-col lg:flex-row justify-center items-center mt-8 px-4 lg:px-0">
-            <div class="w-full lg:w-1/2  mx-auto">
+            <div class="w-full lg:w-1/2 mx-auto">
                 <form id="uploadForm" class="bg-white shadow-lg rounded-lg p-8">
                     <div class="flex flex-wrap -mx-3 mb-6">
                         <!-- Slide Name -->
@@ -68,14 +68,12 @@
 
                         <!-- PDF Upload -->
                         <div class="w-full px-3 mb-6">
-                            <label for="pdfFile" class="cursor-pointer flex flex-col items-center justify-center w-full h-32 rounded-xl border-2 border-dashed border-green-400 bg-white p-6 text-center">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-green-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-                                </svg>
-                                <h2 class="mt-4 text-xl font-medium text-gray-700 tracking-wide">Your PDF</h2>
-                                <p id="fileName" class="mt-2 text-gray-500 tracking-wide">Upload or drag & drop your PDF file.</p>
-                                <input id="pdfFile" type="file" class="hidden" accept=".pdf" required />
-                            </label>
+                            <label class="block text-gray-700 text-sm font-bold mb-2 uppercase tracking-wide">PDF Files</label>
+                            <button type="button" id="addPdfButton" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 mb-4">+ Add PDF</button>
+                            
+                            <div id="pdfList" class="space-y-2"></div>
+    
+                            <input id="pdfFiles" type="file" class="hidden" accept=".pdf" multiple />
                         </div>
 
                         <!-- Submit Button -->
@@ -89,81 +87,121 @@
             </div>
         </div>
     </div>
+
 <script>
-    const fileInput = document.getElementById('pdfFile');
-    const fileNameDisplay = document.getElementById('fileName');
+    const fileInput = document.getElementById('pdfFiles');
+    const pdfList = document.getElementById('pdfList');
+    const addPdfButton = document.getElementById('addPdfButton');
     const messageDiv = document.getElementById('message');
+    let selectedFiles = [];
+
+    addPdfButton.addEventListener('click', () => {
+        fileInput.click();
+    });
 
     fileInput.addEventListener('change', () => {
-        if (fileInput.files.length > 0) {
-            fileNameDisplay.textContent = fileInput.files[0].name;
-        } else {
-            fileNameDisplay.textContent = "Upload or drag & drop your PDF file.";
-        }
+        const newFiles = Array.from(fileInput.files);
+        selectedFiles.push(...newFiles);
+        renderFileList();
+        fileInput.value = '';
     });
+
+    function renderFileList() {
+        pdfList.innerHTML = '';
+        selectedFiles.forEach((file, index) => {
+            const fileDiv = document.createElement('div');
+            fileDiv.className = "flex items-center justify-between bg-gray-100 p-3 rounded-lg shadow-md";
+
+            const fileName = document.createElement('span');
+            fileName.textContent = file.name;
+            fileName.className = "text-gray-700";
+
+            const removeButton = document.createElement('button');
+            removeButton.textContent = "-";
+            removeButton.className = "text-red-600 bg-transparent border-none cursor-pointer font-bold text-lg";
+            removeButton.addEventListener('click', () => {
+                selectedFiles.splice(index, 1);
+                renderFileList();
+            });
+            
+
+            const uploadButton = document.createElement('button');
+            uploadButton.textContent = "Upload";
+            uploadButton.className = "bg-green-500 text-white px-2 py-1 rounded-lg hover:bg-green-600 flex items-left ml-auto mr-6";
+
+            uploadButton.addEventListener('click', async () => {
+                // Create formData for the specific file
+                const formData = new FormData();
+                formData.append('pdf', file);
+
+                // Add other form data
+                formData.append('name', document.querySelector('input[name="name"]').value);
+                formData.append('description', document.querySelector('textarea[name="description"]').value);
+                const themeValue = document.querySelector('input[name="theme"]:checked')?.value;
+                if (themeValue === undefined) {
+                    messageDiv.innerHTML = '<p class="text-red-600">Please select a theme.</p>';
+                    return;
+                }
+                formData.append('themaCode', themeValue);
+
+                try {
+                    const response = await axios.post('/slide/upload', formData, {
+                        headers: { 'Content-Type': 'multipart/form-data' }
+                    });
+
+                    if (response.status === 200) {
+                        messageDiv.innerHTML = `<p class="text-green-600">${file.name} uploaded successfully.</p>`;
+                    } else {
+                        messageDiv.innerHTML = `<p class="text-red-600">${response.data.error}</p>`;
+                    }
+                } catch (error) {
+                    messageDiv.innerHTML = `<p class="text-red-600">Error uploading ${file.name}.</p>`;
+                }
+            });
+
+            fileDiv.appendChild(fileName);
+            fileDiv.appendChild(uploadButton);
+            fileDiv.appendChild(removeButton);
+            pdfList.appendChild(fileDiv);
+        });
+    }
 
     document.getElementById('uploadForm').addEventListener('submit', async (e) => {
         e.preventDefault();
 
-        if (!fileInput.files[0]) {
-            messageDiv.innerHTML = '<p class="text-red-600">Please select a file.</p>';
+        if (selectedFiles.length === 0) {
+            messageDiv.innerHTML = '<p class="text-red-600">Please add at least one PDF file.</p>';
             return;
         }
 
         const formData = new FormData();
-        formData.append('pdf', fileInput.files[0]);
+        selectedFiles.forEach((file, index) => {
+            formData.append(`pdf${index}`, file);
+        });
+
         formData.append('name', document.querySelector('input[name="name"]').value);
         formData.append('description', document.querySelector('textarea[name="description"]').value);
-
         const themeValue = document.querySelector('input[name="theme"]:checked')?.value;
         if (themeValue === undefined) {
             messageDiv.innerHTML = '<p class="text-red-600">Please select a theme.</p>';
             return;
         }
-        formData.append('themaCode', themeValue); // Add theme code
+        formData.append('themaCode', themeValue);
 
         try {
-            const response = await axios.post('/slide/upload', formData, {
+            const response = await axios.post('/slide/generate', formData, {
                 headers: { 'Content-Type': 'multipart/form-data' }
             });
 
             if (response.status === 200) {
-                messageDiv.innerHTML = '<p class="text-green-600">File uploaded successfully.</p>';
-                loadFileList();
+                messageDiv.innerHTML = `<p class="text-green-600">Slides generated successfully!</p>`;
             } else {
                 messageDiv.innerHTML = `<p class="text-red-600">${response.data.error}</p>`;
             }
         } catch (error) {
-            messageDiv.innerHTML = '<p class="text-red-600">Error uploading file.</p>';
+            messageDiv.innerHTML = `<p class="text-red-600">Error generating slides.</p>`;
         }
-
-        fileInput.value = '';
-        fileNameDisplay.textContent = "Upload or drag & drop your PDF file.";
     });
-
-    async function loadFileList() {
-        const fileListDiv = document.getElementById('fileList');
-
-        try {
-            const response = await axios.get('/slide/files');
-            const files = response.data;
-
-            fileListDiv.innerHTML = files.map((file, index) => `
-                <tr>
-                    <td class="p-2 text-center">${index + 1}</td>
-                    <td class="p-2">${file.name}</td>
-                    <td class="p-2 text-left">${file.description}</td>
-                    <td class="p-2 text-center">
-                        <a href="/download/${file.filename}" class="text-green-600 hover:text-green-800">Download</a>
-                    </td>
-                </tr>
-            `).join('');
-        } catch (error) {
-            fileListDiv.innerHTML = '<tr><td colspan="4" class="p-4 text-center text-red-600">Error loading file list.</td></tr>';
-        }
-    }
-
-    loadFileList();
 </script>
 </body>
 </html>
