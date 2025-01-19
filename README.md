@@ -1,4 +1,4 @@
-# Proje Adı: Fluctos
+# Proje Adı: Fluctos Slide Generator
 
 ## Proje Tanımı
 
